@@ -14,6 +14,9 @@
 | 📊 Manager Bot | 数据分析、管理决策 | 老板 / 经理 | `04-manager-bot.md` |
 | 🎓 Training System | 新人培训流程（不用人带） | 新员工 | `05-training-system.md` |
 | ⚠️ Allergen List | 过敏原对照 + 客人应对话术 | 前线员工 / 厨房 | `06-allergen-list.md` |
+| 💰 Pricing & Cost | 成本率分析 + 定价策略 + 套餐 | 老板 / 经理 | `07-pricing-cost.md` |
+| 📸 Photo Checklist | 菜品拍照规范 + 进度追踪 | 摄影师 / 营销 | `08-photo-checklist.md` |
+| 🍽️ Menu Design | 菜单设计稿 + 设计师 Brief | 老板 / 设计师 | `09-menu-design.md` |
 
 ---
 

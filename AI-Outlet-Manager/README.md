@@ -13,6 +13,7 @@
 | 💬 Frontline Bot | 客服话术、推荐成交 | 前线员工 / WhatsApp | `03-frontline-bot.md` |
 | 📊 Manager Bot | 数据分析、管理决策 | 老板 / 经理 | `04-manager-bot.md` |
 | 🎓 Training System | 新人培训流程（不用人带） | 新员工 | `05-training-system.md` |
+| ⚠️ Allergen List | 过敏原对照 + 客人应对话术 | 前线员工 / 厨房 | `06-allergen-list.md` |
 
 ---
 

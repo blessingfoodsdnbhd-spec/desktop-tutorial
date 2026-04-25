@@ -548,8 +548,21 @@ function initResult() {
 }
 
 /* =====================================================
-   6. LEAD CAPTURE
+   6. LEAD CAPTURE + INSTANT VOUCHER
    ===================================================== */
+
+// Paste your Google Apps Script Web App URL here when ready.
+// Leave empty to skip remote logging (still saved to localStorage as fallback).
+const LEAD_ENDPOINT = '';
+
+/** 6-char unambiguous voucher code, prefixed with TBF-. */
+function generateVoucherCode() {
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // skip I O 0 1
+  let code = 'TBF-';
+  for (let i = 0; i < 6; i++) code += chars[Math.floor(Math.random() * chars.length)];
+  return code;
+}
+
 function openLead()  { $('#lead-overlay').classList.add('show'); }
 function closeLead() { $('#lead-overlay').classList.remove('show'); }
 
@@ -572,18 +585,34 @@ function initLead() {
 
     if (!valid) return;
 
-    // Persist locally so the merchant can collect from analytics later.
-    // Replace with a real POST to your CRM/WhatsApp API when wiring backend.
+    // Mint voucher BEFORE network call so the user always gets one instantly.
+    state.voucherCode = generateVoucherCode();
+
+    const lead = {
+      name, phone,
+      score: state.score,
+      percentile: state.percentile,
+      voucher: state.voucherCode,
+      ts: new Date().toISOString(),
+    };
+
+    // Local fallback so nothing is lost even if endpoint fails / not set yet.
     try {
       const leads = JSON.parse(localStorage.getItem('tbc_leads') || '[]');
-      leads.push({
-        name, phone,
-        score: state.score,
-        percentile: state.percentile,
-        ts: new Date().toISOString(),
-      });
+      leads.push(lead);
       localStorage.setItem('tbc_leads', JSON.stringify(leads));
     } catch (_) {}
+
+    // Fire-and-forget POST to Google Sheets / backend if configured.
+    if (LEAD_ENDPOINT) {
+      fetch(LEAD_ENDPOINT, {
+        method: 'POST',
+        body: JSON.stringify(lead),
+        // Apps Script web apps don't accept custom Content-Type without preflight,
+        // so we send text/plain and parse JSON server-side.
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      }).catch(() => {});
+    }
 
     haptic(20);
     closeLead();
@@ -597,15 +626,21 @@ function flagInvalid(input) {
 }
 
 /* =====================================================
-   7. SHARE SCREEN
+   7. SHARE / VOUCHER SCREEN
    ===================================================== */
 function showShare() {
   $('#share-pct').textContent = state.percentile;
-  setMascot($('#share-mascot'), 'proud');
+  $('#voucher-code').textContent = state.voucherCode || generateVoucherCode();
   showScreen('share');
 }
 
 function initShare() {
+  $('#btn-copy-code').addEventListener('click', () => {
+    haptic();
+    copyToClipboard(state.voucherCode || $('#voucher-code').textContent);
+    flashBtn($('#btn-copy-code'), '✅ Copied!');
+  });
+
   $('#btn-share').addEventListener('click', async () => {
     haptic();
     const text = `🔥 I beat ${state.percentile}% of players in the Thai Blessing Cooking Challenge! Can you beat me?`;

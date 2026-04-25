@@ -152,7 +152,7 @@
         <button class="close-x" id="lead-close" aria-label="Close">✕</button>
         <div class="lead-emoji">🎉</div>
         <h2>You Won a Reward!</h2>
-        <p class="lead-sub">Enter your details — we'll send your <strong>RM10 voucher</strong> via WhatsApp.</p>
+        <p class="lead-sub">Enter your details to <strong>instantly unlock</strong> your RM10 voucher.</p>
 
         <form id="lead-form" novalidate>
           <label class="field">
@@ -164,30 +164,44 @@
             <input id="lead-phone" name="phone" type="tel" autocomplete="tel" placeholder="e.g. 0123456789" required pattern="[0-9+\s\-]{7,}" inputmode="tel" />
           </label>
 
-          <button type="submit" class="cta-btn cta-claim">GET MY REWARD</button>
+          <button type="submit" class="cta-btn cta-claim">🎁 UNLOCK VOUCHER</button>
 
-          <p class="lead-note">🔒 Reward will be sent via WhatsApp within 24h.</p>
+          <p class="lead-note">🔒 Voucher shows instantly. Just screenshot and show in-store.</p>
         </form>
       </div>
     </div>
 
     <!-- ============================== -->
-    <!-- 5. SHARE SCREEN                -->
+    <!-- 5. SHARE / VOUCHER SCREEN      -->
     <!-- ============================== -->
     <section id="screen-share" class="screen">
       <div class="share-card">
-        <div id="share-mascot" class="mascot-wrap mascot-bounce"></div>
-        <h2 class="share-h">Reward Sent! ✅</h2>
-        <p class="share-sub">Check WhatsApp in 24h.<br/>Now flex on your friends 👇</p>
+        <h2 class="share-h">🎉 Voucher Unlocked!</h2>
+
+        <!-- Voucher ticket: this is the redeemable proof -->
+        <div class="voucher">
+          <div class="voucher-left">
+            <div class="voucher-brand">泰有福 · THAI BLESSING</div>
+            <div class="voucher-value">RM10<span>OFF</span></div>
+            <div class="voucher-code-label">YOUR CODE</div>
+            <div class="voucher-code" id="voucher-code">TBF-XXXXXX</div>
+            <button id="btn-copy-code" class="voucher-copy">📋 Copy Code</button>
+          </div>
+          <div class="voucher-stub">
+            <div class="voucher-stub-text">SHOW<br/>IN-STORE</div>
+          </div>
+        </div>
+
+        <p class="voucher-howto">
+          📸 <strong>Screenshot this</strong> & show at any 泰有福 outlet to redeem.
+        </p>
 
         <div class="share-quote">
           🔥 I beat <strong id="share-pct">82</strong>% of players!<br/>
           Can you beat me?
         </div>
 
-        <button id="btn-share" class="cta-btn cta-claim">
-          📤 SHARE NOW
-        </button>
+        <button id="btn-share" class="cta-btn cta-claim">📤 CHALLENGE FRIENDS</button>
         <button id="btn-copy" class="ghost-btn">📋 Copy Link</button>
 
         <button id="btn-restart" class="text-btn">Play again</button>

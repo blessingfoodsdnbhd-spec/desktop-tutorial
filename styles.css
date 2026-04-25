@@ -711,6 +711,122 @@ input  { font-family: inherit; }
 }
 .share-quote strong { color: var(--chili); font-size: 22px; }
 
+/* ===== Voucher ticket (instant reward) ===== */
+.voucher {
+  position: relative;
+  width: 100%;
+  max-width: 340px;
+  display: flex;
+  background: linear-gradient(135deg, #FFD600 0%, #FFB300 100%);
+  color: #1a1000;
+  border-radius: var(--radius-lg);
+  margin: 8px 0 14px;
+  box-shadow: 0 0 32px rgba(255,214,0,.45), 0 8px 24px rgba(0,0,0,.4);
+  overflow: hidden;
+  animation: voucherIn .55s cubic-bezier(.18,.89,.32,1.28);
+}
+@keyframes voucherIn {
+  0%   { transform: scale(.5) rotate(-6deg); opacity: 0; }
+  60%  { transform: scale(1.06) rotate(2deg); opacity: 1; }
+  100% { transform: scale(1) rotate(0); }
+}
+/* punched divider between voucher body and stub */
+.voucher::before, .voucher::after {
+  content: '';
+  position: absolute;
+  width: 22px; height: 22px;
+  background: var(--bg);
+  border-radius: 50%;
+  right: 90px;
+  z-index: 2;
+}
+.voucher::before { top: -11px; }
+.voucher::after  { bottom: -11px; }
+
+.voucher-left {
+  flex: 1;
+  padding: 16px 18px;
+  border-right: 2px dashed rgba(0,0,0,.25);
+}
+.voucher-brand {
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  font-weight: 800;
+  color: #5c3a00;
+}
+.voucher-value {
+  font-family: var(--font-display);
+  font-size: 44px;
+  font-weight: 800;
+  line-height: 1;
+  margin-top: 4px;
+  color: var(--chili);
+  text-shadow: 2px 2px 0 #fff;
+}
+.voucher-value span {
+  font-size: 16px;
+  margin-left: 6px;
+  color: #1a1000;
+  text-shadow: none;
+  vertical-align: middle;
+}
+.voucher-code-label {
+  font-size: 10px;
+  letter-spacing: 2px;
+  margin-top: 10px;
+  font-weight: 700;
+  color: #5c3a00;
+}
+.voucher-code {
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  background: #1a1000;
+  color: #FFD600;
+  padding: 6px 10px;
+  border-radius: 8px;
+  display: inline-block;
+  margin-top: 4px;
+}
+.voucher-copy {
+  margin-top: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  background: rgba(0,0,0,.85);
+  color: var(--lemon);
+  padding: 6px 12px;
+  border-radius: 999px;
+}
+.voucher-copy:active { transform: scale(.95); }
+
+.voucher-stub {
+  width: 90px;
+  background: var(--chili);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.voucher-stub-text {
+  color: #fff;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 14px;
+  letter-spacing: 2px;
+  text-align: center;
+  line-height: 1.2;
+  transform: rotate(90deg);
+  white-space: nowrap;
+}
+.voucher-howto {
+  font-size: 13px;
+  color: var(--ink-dim);
+  margin-bottom: 14px;
+  max-width: 320px;
+  text-align: center;
+}
+.voucher-howto strong { color: var(--lemon); }
+
 /* small confetti for results */
 .confetti {
   position: absolute;

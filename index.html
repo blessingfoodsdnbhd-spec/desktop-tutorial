@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chef Mali's Thai Kitchen</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div id="app">
+    <header class="topbar">
+      <div class="logo">
+        <span class="logo-emoji">🌶️</span>
+        <span class="logo-text" data-i18n="title">Chef Mali's Thai Kitchen</span>
+      </div>
+      <button id="lang-toggle" class="lang-btn" aria-label="Switch language">EN / 中文</button>
+    </header>
+
+    <main id="screens">
+      <!-- TITLE SCREEN -->
+      <section id="screen-title" class="screen active">
+        <div class="title-card">
+          <div class="chef-avatar">👩‍🍳</div>
+          <h1 data-i18n="title">Chef Mali's Thai Kitchen</h1>
+          <p class="subtitle" data-i18n="subtitle">Cook 4 classic Thai dishes!</p>
+          <button class="big-btn" data-action="goto-menu" data-i18n="start">Start Cooking</button>
+          <p class="hint" data-i18n="hint">Tip: Use mouse / tap. Have fun!</p>
+        </div>
+        <div class="deco deco-tl">🌿</div>
+        <div class="deco deco-tr">🍋</div>
+        <div class="deco deco-bl">🌶️</div>
+        <div class="deco deco-br">🥭</div>
+      </section>
+
+      <!-- MENU SCREEN -->
+      <section id="screen-menu" class="screen">
+        <h2 data-i18n="pick_dish">Pick a Dish</h2>
+        <div id="dish-grid" class="dish-grid"></div>
+        <button class="back-btn" data-action="goto-title" data-i18n="back">← Back</button>
+      </section>
+
+      <!-- COOK SCREEN -->
+      <section id="screen-cook" class="screen">
+        <div class="cook-header">
+          <div class="dish-info">
+            <span id="cook-dish-emoji" class="cook-emoji">🍜</span>
+            <span id="cook-dish-name" class="cook-name">Pad Thai</span>
+          </div>
+          <div class="step-info">
+            <span data-i18n="step">Step</span>
+            <span id="cook-step-num">1</span> / <span id="cook-step-total">3</span>
+          </div>
+        </div>
+
+        <div class="instruction-bar">
+          <span id="cook-instruction">…</span>
+        </div>
+
+        <div id="cook-stage" class="stage"></div>
+
+        <div class="cook-footer">
+          <div class="timer-wrap">
+            <div id="cook-timer-bar" class="timer-bar"></div>
+          </div>
+          <div class="score-wrap">
+            <span data-i18n="score">Score</span>: <span id="cook-score">0</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- RESULT SCREEN -->
+      <section id="screen-result" class="screen">
+        <div class="result-card">
+          <div id="result-emoji" class="result-emoji">🍜</div>
+          <h2 id="result-dish-name">Pad Thai</h2>
+          <div id="result-stars" class="stars">⭐⭐⭐</div>
+          <div class="result-score">
+            <span data-i18n="final_score">Final Score</span>:
+            <span id="result-score-num">0</span> / 300
+          </div>
+          <p id="result-quote" class="quote">…</p>
+          <div class="result-buttons">
+            <button class="big-btn" data-action="play-again" data-i18n="play_again">Play Again</button>
+            <button class="ghost-btn" data-action="goto-menu" data-i18n="other_dish">Try Another Dish</button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="bottombar">
+      <span data-i18n="footer">Made with 🌶️ — an original Thai cooking mini-game</span>
+    </footer>
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>

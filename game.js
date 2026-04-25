@@ -1,564 +1,640 @@
-/* =========================================================
-   Chef Mali's Thai Kitchen — original cooking mini-game
-   Pure HTML/CSS/JS, no dependencies.
-   ========================================================= */
+/* =================================================================
+   THAI BLESSING COOKING CHALLENGE — game.js
+   Vanilla JS, mobile-first.
+   Sections:
+     1. Mascot SVG (4 expressions)
+     2. State + screen router
+     3. Home screen (live counter, start)
+     4. Game loop (30s, queue of micro-tasks)
+        - Task A: Swipe to cut chili
+        - Task B: Tap correct ingredient
+        - Task C: Drag to stir
+        - Task D: Tap timing to plate
+     5. Result screen (rank, percentile, confetti)
+     6. Lead capture (validates name + WhatsApp)
+     7. Share screen (Web Share API + clipboard)
+   ================================================================= */
 
-// ---------- i18n ----------
-const I18N = {
-  en: {
-    title: "Chef Mali's Thai Kitchen",
-    subtitle: "Cook 4 classic Thai dishes!",
-    start: "Start Cooking",
-    hint: "Tip: Use mouse / tap. Have fun!",
-    pick_dish: "Pick a Dish",
-    back: "← Back",
-    step: "Step",
-    score: "Score",
-    final_score: "Final Score",
-    play_again: "Play Again",
-    other_dish: "Try Another Dish",
-    footer: "Made with 🌶️ — an original Thai cooking mini-game",
+(() => {
+'use strict';
 
-    // Quotes by stars
-    quote_3: "Aroi mak mak! Absolutely delicious! ⭐",
-    quote_2: "Not bad — keep practicing!",
-    quote_1: "Hmm, a bit messy… try again?",
-    quote_0: "Oh no… let's start over!",
+/* =====================================================
+   1. MASCOT — Mama Thai Blessing
+   Single SVG body, swap face by expression.
+   ===================================================== */
+const MASCOT_FACES = {
+  happy: `
+    <!-- happy: smile + sparkle eyes -->
+    <ellipse cx="38" cy="58" rx="3.5" ry="4" fill="#1a1a1a"/>
+    <ellipse cx="62" cy="58" rx="3.5" ry="4" fill="#1a1a1a"/>
+    <circle cx="36.5" cy="56.5" r="1" fill="#fff"/>
+    <circle cx="60.5" cy="56.5" r="1" fill="#fff"/>
+    <path d="M40 70 Q50 78 60 70" stroke="#1a1a1a" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <circle cx="30" cy="65" r="3" fill="#ff8a8a" opacity=".7"/>
+    <circle cx="70" cy="65" r="3" fill="#ff8a8a" opacity=".7"/>`,
 
-    // Step instructions
-    instr_chop:    "Click to chop! Hit every piece.",
-    instr_tap:     "Tap rapidly to fill the bar!",
-    instr_timing:  "Stop the bar in the green zone!",
-    instr_drag:    "Drag ingredients onto the plate.",
-    instr_pound:   "Pound the paste — tap fast!",
-    instr_pour:    "Hold to pour — release in the green zone!",
-    instr_stir:    "Stir-fry! Tap rapidly!",
-    instr_squeeze: "Squeeze the lime — tap rapidly!",
-    instr_slice:   "Slice the mango — click each piece!",
-    instr_mix:     "Mix the rice — tap rapidly!",
-    instr_plate:   "Plate up! Drag ingredients to the dish.",
-    instr_boil:    "Stop when the water is just right!",
-    instr_herbs:   "Drop herbs into the pot!",
-    instr_basil:   "Add chicken & basil to the curry!",
+  shocked: `
+    <!-- shocked: O mouth + wide eyes -->
+    <circle cx="38" cy="58" r="5" fill="#fff" stroke="#1a1a1a" stroke-width="1.5"/>
+    <circle cx="62" cy="58" r="5" fill="#fff" stroke="#1a1a1a" stroke-width="1.5"/>
+    <circle cx="38" cy="58" r="2.5" fill="#1a1a1a"/>
+    <circle cx="62" cy="58" r="2.5" fill="#1a1a1a"/>
+    <ellipse cx="50" cy="73" rx="4" ry="6" fill="#1a1a1a"/>`,
 
-    perfect: "Perfect!",
-    good: "Good!",
-    nice: "Nice!",
-    miss: "Miss!",
-    timeup: "Time's up!"
-  },
-  zh: {
-    title: "瑪莉廚師的泰國廚房",
-    subtitle: "來煮 4 道經典泰國菜！",
-    start: "開始下廚",
-    hint: "提示：用滑鼠或觸控操作，玩得開心！",
-    pick_dish: "選一道菜",
-    back: "← 返回",
-    step: "步驟",
-    score: "分數",
-    final_score: "最終分數",
-    play_again: "再玩一次",
-    other_dish: "換一道菜",
-    footer: "用 🌶️ 做的 — 原創泰式料理小遊戲",
+  angry: `
+    <!-- angry but funny: angled brows + frown -->
+    <path d="M32 52 L44 56" stroke="#1a1a1a" stroke-width="3" stroke-linecap="round"/>
+    <path d="M68 52 L56 56" stroke="#1a1a1a" stroke-width="3" stroke-linecap="round"/>
+    <ellipse cx="38" cy="60" rx="3" ry="3.5" fill="#1a1a1a"/>
+    <ellipse cx="62" cy="60" rx="3" ry="3.5" fill="#1a1a1a"/>
+    <path d="M40 75 Q50 68 60 75" stroke="#1a1a1a" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <circle cx="28" cy="62" r="3" fill="#ff5555" opacity=".8"/>
+    <circle cx="72" cy="62" r="3" fill="#ff5555" opacity=".8"/>`,
 
-    quote_3: "阿羅伊馬！超級美味！⭐",
-    quote_2: "還不錯～繼續加油！",
-    quote_1: "嗯…有點亂，再試一次？",
-    quote_0: "唉呀…我們重新來過吧！",
-
-    instr_chop:    "點擊切菜！把每一塊都切了。",
-    instr_tap:     "快速點擊填滿進度條！",
-    instr_timing:  "在綠色區域停下！",
-    instr_drag:    "把食材拖到盤子上。",
-    instr_pound:   "搗咖哩醬 — 快速點擊！",
-    instr_pour:    "按住倒入 — 在綠色區放開！",
-    instr_stir:    "炒一炒！快速點擊！",
-    instr_squeeze: "擠檸檬汁 — 快速點擊！",
-    instr_slice:   "切芒果 — 點擊每一塊！",
-    instr_mix:     "拌飯 — 快速點擊！",
-    instr_plate:   "擺盤！把食材拖到菜上。",
-    instr_boil:    "在水溫剛好時停下！",
-    instr_herbs:   "把香料丟進湯裡！",
-    instr_basil:   "加雞肉跟羅勒到咖哩！",
-
-    perfect: "完美！",
-    good: "不錯！",
-    nice: "可以！",
-    miss: "失誤！",
-    timeup: "時間到！"
-  }
+  proud: `
+    <!-- proud: closed-eye smile + sparkles -->
+    <path d="M33 58 Q38 53 43 58" stroke="#1a1a1a" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <path d="M57 58 Q62 53 67 58" stroke="#1a1a1a" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <path d="M38 70 Q50 80 62 70" stroke="#1a1a1a" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <circle cx="30" cy="65" r="3" fill="#ff8a8a" opacity=".7"/>
+    <circle cx="70" cy="65" r="3" fill="#ff8a8a" opacity=".7"/>
+    <text x="20" y="35" font-size="14">✨</text>
+    <text x="72" y="35" font-size="14">✨</text>`,
 };
 
-// ---------- Dish data ----------
-// Each step: { type, key (for instruction), ...config }
-const DISHES = [
-  {
-    id: "padthai",
-    emoji: "🍜",
-    name: { en: "Pad Thai", zh: "泰式炒河粉" },
-    desc: { en: "Stir-fried rice noodles", zh: "炒河粉" },
-    plateBase: "🍜",
-    steps: [
-      { type: "chop",   key: "chop",  pieces: ["🧅","🧄","🥜","🥬"], duration: 8000 },
-      { type: "tap",    key: "stir",  emoji: "🍳", target: 35, duration: 6000 },
-      { type: "drag",   key: "plate", items: ["🍤","🥜","🍋","🌶️","🥚"], duration: 12000 }
-    ]
-  },
-  {
-    id: "tomyum",
-    emoji: "🦐",
-    name: { en: "Tom Yum Goong", zh: "冬蔭功" },
-    desc: { en: "Spicy & sour shrimp soup", zh: "酸辣蝦湯" },
-    plateBase: "🍲",
-    steps: [
-      { type: "timing", key: "boil",  speed: 1.4, duration: 10000 },
-      { type: "drag",   key: "herbs", items: ["🌿","🍋","🌶️","🧄"], duration: 10000 },
-      { type: "tap",    key: "squeeze", emoji: "🍋", target: 30, duration: 5000 }
-    ]
-  },
-  {
-    id: "greencurry",
-    emoji: "🍛",
-    name: { en: "Green Curry", zh: "綠咖哩" },
-    desc: { en: "Coconut curry with chicken", zh: "椰汁雞肉咖哩" },
-    plateBase: "🍛",
-    steps: [
-      { type: "tap",    key: "pound", emoji: "🌿", target: 40, duration: 6000 },
-      { type: "timing", key: "pour",  speed: 1.0, duration: 9000 },
-      { type: "drag",   key: "basil", items: ["🍗","🌿","🍆","🌶️"], duration: 10000 }
-    ]
-  },
-  {
-    id: "mango",
-    emoji: "🥭",
-    name: { en: "Mango Sticky Rice", zh: "芒果糯米飯" },
-    desc: { en: "Sweet rice & ripe mango", zh: "甜糯米配芒果" },
-    plateBase: "🍚",
-    steps: [
-      { type: "chop", key: "slice", pieces: ["🥭","🥭","🥭","🥭"], duration: 7000 },
-      { type: "tap",  key: "mix",   emoji: "🥥", target: 30, duration: 5000 },
-      { type: "drag", key: "plate", items: ["🥭","🥥","🍯","🌸"], duration: 10000 }
-    ]
-  }
-];
+/** Render mascot SVG with given expression. */
+function mascotSVG(expression = 'happy') {
+  return `
+    <svg viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg">
+      <!-- headband -->
+      <path d="M22 42 Q50 30 78 42 L78 50 Q50 42 22 50 Z" fill="#E53935"/>
+      <circle cx="32" cy="40" r="3" fill="#FFD600"/>
+      <circle cx="50" cy="36" r="3" fill="#FFD600"/>
+      <circle cx="68" cy="40" r="3" fill="#FFD600"/>
+      <!-- hair tuft -->
+      <path d="M40 36 Q50 22 60 36" fill="#1a1a1a"/>
+      <!-- face -->
+      <ellipse cx="50" cy="62" rx="28" ry="30" fill="#ffd9b3"/>
+      ${MASCOT_FACES[expression] || MASCOT_FACES.happy}
+      <!-- body / apron -->
+      <path d="M22 92 Q50 88 78 92 L82 118 L18 118 Z" fill="#fff"/>
+      <path d="M30 92 L30 118 M70 92 L70 118" stroke="#E53935" stroke-width="2"/>
+      <text x="38" y="110" font-size="11" fill="#E53935" font-weight="bold">CHEF</text>
+      <!-- apron strap -->
+      <path d="M40 92 L48 86 L52 86 L60 92" stroke="#E53935" stroke-width="2.5" fill="none"/>
+    </svg>`;
+}
 
-// ---------- State ----------
-const STATE = {
-  lang: "en",
-  screen: "title",
-  dishIndex: 0,
-  stepIndex: 0,
-  stepScores: [],
-  currentScore: 0,
-  timerInterval: null,
-  cleanup: null,
-  stepFinished: false
+/** Set mascot expression for a given mount element. */
+function setMascot(el, expression) {
+  if (!el) return;
+  el.innerHTML = mascotSVG(expression);
+}
+
+/* =====================================================
+   2. STATE + ROUTER
+   ===================================================== */
+const $ = (sel) => document.querySelector(sel);
+
+const state = {
+  score: 0,
+  timeLeft: 30,
+  percentile: 0,
+  taskCount: 0,
+  perfectCount: 0,
 };
 
-// ---------- Utility ----------
-const $  = (sel, root = document) => root.querySelector(sel);
-const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
-const t  = (k) => I18N[STATE.lang][k] || k;
-const clamp = (n, lo, hi) => Math.max(lo, Math.min(hi, n));
-const rand  = (lo, hi) => Math.random() * (hi - lo) + lo;
-
+const SCREENS = ['home', 'game', 'result', 'share'];
 function showScreen(name) {
-  $$(".screen").forEach((s) => s.classList.remove("active"));
-  $(`#screen-${name}`).classList.add("active");
-  STATE.screen = name;
-}
-
-function applyI18n() {
-  $$("[data-i18n]").forEach((el) => {
-    const k = el.getAttribute("data-i18n");
-    el.textContent = t(k);
+  SCREENS.forEach((s) => {
+    const el = document.getElementById(`screen-${s}`);
+    if (el) el.classList.toggle('active', s === name);
   });
-  document.documentElement.lang = STATE.lang === "zh" ? "zh-TW" : "en";
 }
 
-function flash(msg, x, y, bad = false) {
-  const stage = $("#cook-stage");
-  if (!stage) return;
-  const pop = document.createElement("div");
-  pop.className = "score-pop" + (bad ? " bad" : "");
-  pop.textContent = msg;
-  pop.style.left = x + "px";
-  pop.style.top  = y + "px";
-  stage.appendChild(pop);
-  setTimeout(() => pop.remove(), 800);
+/* =====================================================
+   3. HOME SCREEN
+   ===================================================== */
+function initHome() {
+  setMascot($('#home-mascot'), 'happy');
+
+  // Fake live counter that drifts up/down for social proof
+  const counterEl = $('#live-count');
+  let n = 1200 + Math.floor(Math.random() * 200);
+  counterEl.textContent = n.toLocaleString();
+  setInterval(() => {
+    n += Math.floor(Math.random() * 7) - 2;
+    if (n < 800) n = 800;
+    counterEl.textContent = n.toLocaleString();
+  }, 1500);
+
+  $('#btn-start').addEventListener('click', () => {
+    haptic();
+    startGame();
+  });
 }
 
-function setTimerBar(pct) {
-  $("#cook-timer-bar").style.width = clamp(pct, 0, 100) + "%";
+/* =====================================================
+   4. GAME LOOP
+   ===================================================== */
+const TASK_DURATION = 4000;       // ms each task max
+const GAME_DURATION = 30;         // seconds total
+let gameTimerId = null;
+let taskTimeoutId = null;
+let currentCleanup = null;
+
+function startGame() {
+  state.score = 0;
+  state.timeLeft = GAME_DURATION;
+  state.taskCount = 0;
+  state.perfectCount = 0;
+
+  $('#hud-score').textContent = '0';
+  $('#hud-timer').textContent = GAME_DURATION;
+  $('#hud-timer').classList.remove('danger');
+  $('#timer-fill').style.width = '100%';
+
+  showScreen('game');
+  setMascot($('#game-mascot'), 'happy');
+  nextTask();
+
+  const startedAt = Date.now();
+  gameTimerId = setInterval(() => {
+    const elapsed = (Date.now() - startedAt) / 1000;
+    const left = Math.max(0, GAME_DURATION - elapsed);
+    state.timeLeft = left;
+    $('#hud-timer').textContent = Math.ceil(left);
+    $('#timer-fill').style.width = `${(left / GAME_DURATION) * 100}%`;
+    if (left <= 5) $('#hud-timer').classList.add('danger');
+    if (left <= 0) endGame();
+  }, 100);
 }
 
-function setScore(n) {
-  STATE.currentScore = n;
-  $("#cook-score").textContent = n;
+function endGame() {
+  clearInterval(gameTimerId);
+  clearTimeout(taskTimeoutId);
+  if (currentCleanup) currentCleanup();
+  showResult();
+}
+
+/** Pick a random task and run it. */
+function nextTask() {
+  if (state.timeLeft <= 0) return;
+  const tasks = [taskCutChili, taskTapIngredient, taskStir, taskTiming];
+  const task = tasks[Math.floor(Math.random() * tasks.length)];
+  state.taskCount++;
+  task();
+}
+
+/** End-of-task helper: scores, feedback, and chains the next task. */
+function finishTask(result) {
+  // result: 'perfect' | 'good' | 'wrong'
+  const points = result === 'perfect' ? 50 : result === 'good' ? 25 : 0;
+  state.score += points;
+  if (result === 'perfect') state.perfectCount++;
+  $('#hud-score').textContent = state.score;
+  showFeedback(result);
+  setMascot(
+    $('#game-mascot'),
+    result === 'perfect' ? 'proud' : result === 'good' ? 'happy' : 'shocked'
+  );
+  haptic(result === 'wrong' ? 30 : 10);
+
+  clearTimeout(taskTimeoutId);
+  taskTimeoutId = setTimeout(() => {
+    if (state.timeLeft > 0) nextTask();
+  }, 600);
+}
+
+function showFeedback(kind) {
+  const el = $('#fb-toast');
+  el.className = 'fb-toast';
+  void el.offsetWidth; // restart anim
+  el.textContent = kind === 'perfect' ? 'PERFECT!' : kind === 'good' ? 'GOOD!' : 'OOPS!';
+  el.classList.add('show', `fb-${kind}`);
 }
 
 function clearStage() {
-  if (STATE.cleanup) {
-    try { STATE.cleanup(); } catch (e) {}
-    STATE.cleanup = null;
-  }
-  if (STATE.timerInterval) {
-    clearInterval(STATE.timerInterval);
-    STATE.timerInterval = null;
-  }
-  $("#cook-stage").innerHTML = "";
+  const stage = $('#game-stage');
+  stage.innerHTML = '';
+  return stage;
 }
 
-// ---------- Menu rendering ----------
-function renderMenu() {
-  const grid = $("#dish-grid");
-  grid.innerHTML = "";
-  DISHES.forEach((dish, i) => {
-    const card = document.createElement("div");
-    card.className = "dish-card";
-    card.innerHTML = `
-      <span class="dish-emoji">${dish.emoji}</span>
-      <div class="dish-name">${dish.name[STATE.lang]}</div>
-      <div class="dish-desc">${dish.desc[STATE.lang]}</div>
-    `;
-    card.addEventListener("click", () => startDish(i));
-    grid.appendChild(card);
-  });
-}
+/* ----- TASK A: Swipe to cut chili ----- */
+function taskCutChili() {
+  $('#task-prompt').textContent = '✂️ Swipe to cut!';
+  const stage = clearStage();
+  stage.insertAdjacentHTML('beforeend', `
+    <div class="cut-line"></div>
+    <div class="chili-target">🌶️</div>
+    <div class="cut-flash"></div>
+  `);
+  const target = stage.querySelector('.chili-target');
+  const flash = stage.querySelector('.cut-flash');
 
-// ---------- Cook flow ----------
-function startDish(index) {
-  STATE.dishIndex = index;
-  STATE.stepIndex = 0;
-  STATE.stepScores = [];
-  STATE.currentScore = 0;
-  const dish = DISHES[index];
-  $("#cook-dish-emoji").textContent = dish.emoji;
-  $("#cook-dish-name").textContent  = dish.name[STATE.lang];
-  $("#cook-step-total").textContent = dish.steps.length;
-  showScreen("cook");
-  runStep();
-}
-
-function runStep() {
-  clearStage();
-  const dish = DISHES[STATE.dishIndex];
-  const step = dish.steps[STATE.stepIndex];
-  STATE.stepFinished = false;
-  $("#cook-step-num").textContent = STATE.stepIndex + 1;
-  $("#cook-instruction").textContent = t("instr_" + step.key);
-  setScore(0);
-  setTimerBar(100);
-
-  // Generic timeout countdown
-  const start = Date.now();
-  STATE.timerInterval = setInterval(() => {
-    const elapsed = Date.now() - start;
-    const pct = 100 - (elapsed / step.duration) * 100;
-    setTimerBar(pct);
-    if (pct <= 0) {
-      clearInterval(STATE.timerInterval);
-      STATE.timerInterval = null;
-      finishStep(); // time-up auto finish
+  let startX = null, startY = null, startT = 0, done = false;
+  const onDown = (e) => {
+    const p = pointer(e);
+    startX = p.x; startY = p.y; startT = Date.now();
+  };
+  const onUp = (e) => {
+    if (done || startX == null) return;
+    const p = pointer(e);
+    const dx = p.x - startX;
+    const dy = p.y - startY;
+    const dist = Math.hypot(dx, dy);
+    const dt = Date.now() - startT;
+    const speed = dist / Math.max(dt, 1); // px/ms
+    if (dist > 80 && Math.abs(dx) > Math.abs(dy)) {
+      done = true;
+      target.classList.add('cut');
+      flash.classList.add('fire');
+      const result = speed > 0.7 ? 'perfect' : 'good';
+      finishTask(result);
+      cleanup();
     }
-  }, 80);
+  };
 
-  // Launch the relevant mini-game
-  switch (step.type) {
-    case "chop":   miniChop(step);   break;
-    case "tap":    miniTap(step);    break;
-    case "timing": miniTiming(step); break;
-    case "drag":   miniDrag(step);   break;
+  stage.addEventListener('pointerdown', onDown);
+  stage.addEventListener('pointerup', onUp);
+  stage.addEventListener('pointercancel', onUp);
+
+  function cleanup() {
+    stage.removeEventListener('pointerdown', onDown);
+    stage.removeEventListener('pointerup', onUp);
+    stage.removeEventListener('pointercancel', onUp);
   }
+  currentCleanup = () => { if (!done) { done = true; cleanup(); } };
+
+  taskTimeoutId = setTimeout(() => {
+    if (done) return;
+    done = true;
+    cleanup();
+    finishTask('wrong');
+  }, TASK_DURATION);
 }
 
-function finishStep() {
-  if (STATE.stepFinished) return;
-  STATE.stepFinished = true;
-  clearStage();
-  STATE.stepScores.push(STATE.currentScore);
-  STATE.stepIndex++;
-  const dish = DISHES[STATE.dishIndex];
-  if (STATE.stepIndex >= dish.steps.length) {
-    showResult();
-  } else {
-    setTimeout(runStep, 400);
-  }
-}
+/* ----- TASK B: Tap correct ingredient ----- */
+const INGREDIENTS = [
+  { e: '🌶️', n: 'Chili' },
+  { e: '🍋', n: 'Lime' },
+  { e: '🥬', n: 'Basil' },
+  { e: '🍤', n: 'Shrimp' },
+  { e: '🥥', n: 'Coconut' },
+  { e: '🧄', n: 'Garlic' },
+  { e: '🍅', n: 'Tomato' },
+  { e: '🥒', n: 'Cucumber' },
+  { e: '🥚', n: 'Egg' },
+];
+function taskTapIngredient() {
+  const pool = shuffled(INGREDIENTS).slice(0, 6);
+  const target = pool[Math.floor(Math.random() * pool.length)];
+  $('#task-prompt').textContent = `🎯 Tap the ${target.n}!`;
 
-// ---------- Mini-game: CHOP ----------
-function miniChop(step) {
-  const stage = $("#cook-stage");
-  const total = step.pieces.length;
-  let hit = 0;
-
-  step.pieces.forEach((emoji, i) => {
-    const el = document.createElement("div");
-    el.className = "target";
-    el.textContent = emoji;
-    // Spread positions
-    const cols = Math.ceil(Math.sqrt(total));
-    const col = i % cols;
-    const row = Math.floor(i / cols);
-    const xPct = 15 + (col / Math.max(1, cols - 1 || 1)) * 70 + rand(-5, 5);
-    const yPct = 20 + (row * 25) + rand(-5, 5);
-    el.style.left = xPct + "%";
-    el.style.top  = yPct + "%";
-    el.addEventListener("click", (e) => {
-      if (el.classList.contains("popped")) return;
-      el.classList.add("popped");
-      hit++;
-      const gain = Math.round(100 / total);
-      setScore(STATE.currentScore + gain);
-      const r = stage.getBoundingClientRect();
-      flash("+" + gain, e.clientX - r.left, e.clientY - r.top);
-      if (hit >= total) {
-        // bonus for finishing fast
-        setTimeout(finishStep, 300);
+  const stage = clearStage();
+  const grid = document.createElement('div');
+  grid.className = 'ing-grid';
+  pool.forEach((ing) => {
+    const cell = document.createElement('button');
+    cell.className = 'ing-item';
+    cell.textContent = ing.e;
+    cell.addEventListener('click', () => {
+      if (done) return;
+      done = true;
+      if (ing.n === target.n) {
+        cell.classList.add('correct');
+        const dt = Date.now() - startT;
+        finishTask(dt < 1200 ? 'perfect' : 'good');
+      } else {
+        cell.classList.add('wrong');
+        finishTask('wrong');
       }
     });
-    stage.appendChild(el);
+    grid.appendChild(cell);
   });
+  stage.appendChild(grid);
 
-  STATE.cleanup = () => {};
+  let done = false;
+  const startT = Date.now();
+  currentCleanup = () => { done = true; };
+  taskTimeoutId = setTimeout(() => {
+    if (done) return;
+    done = true;
+    finishTask('wrong');
+  }, TASK_DURATION);
 }
 
-// ---------- Mini-game: TAP ----------
-function miniTap(step) {
-  const stage = $("#cook-stage");
-  const wrap = document.createElement("div");
-  wrap.className = "tap-zone";
-  wrap.innerHTML = `
-    <div class="tap-emoji">${step.emoji}</div>
-    <div class="tap-fill-wrap"><div class="tap-fill"></div></div>
-    <div class="tap-hint">${t("instr_tap")}</div>
-  `;
-  stage.appendChild(wrap);
+/* ----- TASK C: Drag to stir ----- */
+function taskStir() {
+  $('#task-prompt').textContent = '🥄 Drag in circles to stir!';
+  const stage = clearStage();
+  stage.insertAdjacentHTML('beforeend', `
+    <div class="stir-pot">
+      <div class="stir-spoon"></div>
+      <div class="stir-progress"><div class="stir-progress-fill"></div></div>
+    </div>
+  `);
+  const pot = stage.querySelector('.stir-pot');
+  const spoon = stage.querySelector('.stir-spoon');
+  const fill = stage.querySelector('.stir-progress-fill');
 
-  let taps = 0;
-  const fill = wrap.querySelector(".tap-fill");
-  const tapEmoji = wrap.querySelector(".tap-emoji");
+  let lastAngle = null;
+  let totalRotation = 0;
+  const required = Math.PI * 4; // 2 full rotations
+  let done = false;
+  let active = false;
+  const startT = Date.now();
 
-  const onTap = (e) => {
-    taps++;
-    const pct = clamp((taps / step.target) * 100, 0, 100);
-    fill.style.width = pct + "%";
-    setScore(Math.round(pct));
-    tapEmoji.style.transform = "scale(0.92)";
-    setTimeout(() => (tapEmoji.style.transform = "scale(1)"), 60);
-    const r = stage.getBoundingClientRect();
-    if (e && e.clientX) {
-      flash("+1", (e.clientX || 0) - r.left, (e.clientY || 0) - r.top);
-    }
-    if (taps >= step.target) {
-      setTimeout(finishStep, 300);
-    }
+  const center = () => {
+    const r = pot.getBoundingClientRect();
+    return { x: r.left + r.width/2, y: r.top + r.height/2 };
+  };
+  const angleAt = (e) => {
+    const c = center();
+    const p = pointer(e);
+    return Math.atan2(p.y - c.y, p.x - c.x);
   };
 
-  wrap.addEventListener("click", onTap);
-  // Keyboard support: space
-  const onKey = (e) => {
-    if (e.code === "Space") { e.preventDefault(); onTap({ clientX: 0, clientY: 0 }); }
+  const onDown = (e) => {
+    active = true;
+    lastAngle = angleAt(e);
   };
-  document.addEventListener("keydown", onKey);
-  STATE.cleanup = () => document.removeEventListener("keydown", onKey);
-}
-
-// ---------- Mini-game: TIMING ----------
-function miniTiming(step) {
-  const stage = $("#cook-stage");
-  const wrap = document.createElement("div");
-  wrap.innerHTML = `
-    <div class="timing-stage-extras">🥘</div>
-    <div class="timing-track"><div class="timing-needle"></div></div>
-    <button class="big-btn timing-button">STOP!</button>
-  `;
-  stage.appendChild(wrap);
-
-  const needle = wrap.querySelector(".timing-needle");
-  const btn    = wrap.querySelector(".timing-button");
-  let pos = 0, dir = 1;
-  const speed = step.speed || 1.2;
-
-  let stopped = false;
-  const interval = setInterval(() => {
-    if (stopped) return;
-    pos += dir * speed;
-    if (pos >= 100) { pos = 100; dir = -1; }
-    if (pos <= 0)   { pos = 0;   dir = 1;  }
-    needle.style.left = pos + "%";
-  }, 16);
-
-  btn.addEventListener("click", () => {
-    if (stopped) return;
-    stopped = true;
-    clearInterval(interval);
-
-    // Green zone is 30%..50%, gold 50%..65%
-    let score, label;
-    if (pos >= 30 && pos <= 50) {
-      score = 100; label = t("perfect");
-    } else if (pos > 50 && pos <= 65) {
-      score = 70;  label = t("good");
-    } else if (pos >= 20 && pos < 30) {
-      score = 50;  label = t("nice");
-    } else {
-      score = 20;  label = t("miss");
+  const onMove = (e) => {
+    if (!active || done) return;
+    const a = angleAt(e);
+    let d = a - lastAngle;
+    if (d > Math.PI) d -= 2*Math.PI;
+    if (d < -Math.PI) d += 2*Math.PI;
+    totalRotation += Math.abs(d);
+    lastAngle = a;
+    spoon.style.transform = `rotate(${a + Math.PI/2}rad)`;
+    const ratio = Math.min(1, totalRotation / required);
+    fill.style.width = `${ratio * 100}%`;
+    if (ratio >= 1 && !done) {
+      done = true;
+      cleanup();
+      const elapsed = Date.now() - startT;
+      finishTask(elapsed < 2500 ? 'perfect' : 'good');
     }
-    setScore(score);
-    const r = stage.getBoundingClientRect();
-    flash(label + " +" + score, r.width / 2, r.height / 2, score < 50);
-    setTimeout(finishStep, 700);
-  });
+  };
+  const onUp = () => { active = false; };
 
-  STATE.cleanup = () => clearInterval(interval);
-}
+  pot.addEventListener('pointerdown', onDown);
+  window.addEventListener('pointermove', onMove);
+  window.addEventListener('pointerup', onUp);
+  window.addEventListener('pointercancel', onUp);
 
-// ---------- Mini-game: DRAG ----------
-function miniDrag(step) {
-  const stage = $("#cook-stage");
-  const dish = DISHES[STATE.dishIndex];
-
-  const target = document.createElement("div");
-  target.className = "drag-target";
-  target.dataset.placed = "0";
-  target.innerHTML = `<span class="placed-emoji">${dish.plateBase}</span>`;
-  stage.appendChild(target);
-
-  const tray = document.createElement("div");
-  tray.className = "drag-tray";
-  step.items.forEach((emoji) => {
-    const el = document.createElement("div");
-    el.className = "drag-item";
-    el.textContent = emoji;
-    tray.appendChild(el);
-    enableDrag(el, target, emoji);
-  });
-  stage.appendChild(tray);
-
-  const total = step.items.length;
-  let placed = 0;
-
-  function enableDrag(el, dropTarget, emoji) {
-    let ghost = null;
-    const onDown = (e) => {
-      e.preventDefault();
-      const point = (e.touches ? e.touches[0] : e);
-      ghost = document.createElement("div");
-      ghost.className = "drag-ghost";
-      ghost.textContent = emoji;
-      ghost.style.left = point.clientX + "px";
-      ghost.style.top  = point.clientY + "px";
-      document.body.appendChild(ghost);
-
-      const onMove = (ev) => {
-        if (ev.touches) ev.preventDefault();
-        const p = ev.touches ? ev.touches[0] : ev;
-        ghost.style.left = p.clientX + "px";
-        ghost.style.top  = p.clientY + "px";
-        const rect = dropTarget.getBoundingClientRect();
-        const inside =
-          p.clientX >= rect.left && p.clientX <= rect.right &&
-          p.clientY >= rect.top  && p.clientY <= rect.bottom;
-        dropTarget.classList.toggle("hover", inside);
-      };
-      const onUp = (ev) => {
-        const p = ev.changedTouches ? ev.changedTouches[0] : ev;
-        const rect = dropTarget.getBoundingClientRect();
-        const inside =
-          p.clientX >= rect.left && p.clientX <= rect.right &&
-          p.clientY >= rect.top  && p.clientY <= rect.bottom;
-        if (inside && !el.classList.contains("placed")) {
-          el.classList.add("placed");
-          placed++;
-          const placedEl = document.createElement("span");
-          placedEl.className = "placed-emoji";
-          placedEl.textContent = emoji;
-          dropTarget.appendChild(placedEl);
-          const gain = Math.round(100 / total);
-          setScore(STATE.currentScore + gain);
-          const r = stage.getBoundingClientRect();
-          flash("+" + gain, p.clientX - r.left, p.clientY - r.top);
-          if (placed >= total) setTimeout(finishStep, 350);
-        }
-        dropTarget.classList.remove("hover");
-        if (ghost) { ghost.remove(); ghost = null; }
-        document.removeEventListener("mousemove", onMove);
-        document.removeEventListener("mouseup",   onUp);
-        document.removeEventListener("touchmove", onMove);
-        document.removeEventListener("touchend",  onUp);
-      };
-      document.addEventListener("mousemove", onMove);
-      document.addEventListener("mouseup",   onUp);
-      document.addEventListener("touchmove", onMove, { passive: false });
-      document.addEventListener("touchend",  onUp);
-    };
-    el.addEventListener("mousedown", onDown);
-    el.addEventListener("touchstart", onDown, { passive: false });
+  function cleanup() {
+    pot.removeEventListener('pointerdown', onDown);
+    window.removeEventListener('pointermove', onMove);
+    window.removeEventListener('pointerup', onUp);
+    window.removeEventListener('pointercancel', onUp);
   }
-
-  STATE.cleanup = () => {};
+  currentCleanup = () => { if (!done) { done = true; cleanup(); } };
+  taskTimeoutId = setTimeout(() => {
+    if (done) return;
+    done = true;
+    cleanup();
+    finishTask(totalRotation > required * 0.5 ? 'good' : 'wrong');
+  }, TASK_DURATION + 1500);
 }
 
-// ---------- Result ----------
+/* ----- TASK D: Tap timing to plate ----- */
+function taskTiming() {
+  $('#task-prompt').textContent = '🍽️ Tap when in the YELLOW zone!';
+  const stage = clearStage();
+  stage.insertAdjacentHTML('beforeend', `
+    <div style="display:flex;flex-direction:column;align-items:center;width:100%">
+      <div class="timing-bar">
+        <div class="timing-zone"></div>
+        <div class="timing-zone-perfect"></div>
+        <div class="timing-marker" id="timing-marker"></div>
+      </div>
+      <button class="timing-tap-btn" id="timing-tap">TAP!</button>
+    </div>
+  `);
+  const marker = stage.querySelector('#timing-marker');
+  const btn = stage.querySelector('#timing-tap');
+
+  let pos = 0;
+  let dir = 1;
+  let done = false;
+  let rafId = null;
+
+  const tick = () => {
+    if (done) return;
+    pos += dir * 1.6; // % per frame
+    if (pos > 100) { pos = 100; dir = -1; }
+    if (pos < 0)   { pos = 0;   dir = 1; }
+    marker.style.left = `calc(${pos}% - 3px)`;
+    rafId = requestAnimationFrame(tick);
+  };
+  rafId = requestAnimationFrame(tick);
+
+  btn.addEventListener('click', () => {
+    if (done) return;
+    done = true;
+    cancelAnimationFrame(rafId);
+    if (pos >= 46 && pos <= 54)       finishTask('perfect');
+    else if (pos >= 36 && pos <= 64)  finishTask('good');
+    else                              finishTask('wrong');
+  });
+
+  currentCleanup = () => {
+    if (done) return;
+    done = true;
+    cancelAnimationFrame(rafId);
+  };
+  taskTimeoutId = setTimeout(() => {
+    if (done) return;
+    done = true;
+    cancelAnimationFrame(rafId);
+    finishTask('wrong');
+  }, TASK_DURATION + 1000);
+}
+
+/* =====================================================
+   5. RESULT SCREEN
+   ===================================================== */
 function showResult() {
-  const dish = DISHES[STATE.dishIndex];
-  const total = STATE.stepScores.reduce((a, b) => a + b, 0);
-  const max = dish.steps.length * 100;
-  const ratio = total / max;
-  let stars;
-  if (ratio >= 0.85) stars = 3;
-  else if (ratio >= 0.6) stars = 2;
-  else if (ratio >= 0.3) stars = 1;
-  else stars = 0;
+  // Score is up to ~taskCount*50. Normalize to 0-100 percentile-ish.
+  // Plus a small random kick so two players with the same score see slight variance.
+  const maxLikely = Math.max(state.taskCount, 6) * 50;
+  const ratio = Math.min(1, state.score / maxLikely);
+  const noise = Math.random() * 6 - 3;
+  let pct = Math.round(ratio * 95 + noise);
+  // Clamp so even bad players see >5 (keeps the share text fun)
+  pct = Math.max(5, Math.min(98, pct));
+  state.percentile = pct;
 
-  $("#result-emoji").textContent     = dish.emoji;
-  $("#result-dish-name").textContent = dish.name[STATE.lang];
-  $("#result-stars").textContent     = stars > 0
-    ? "⭐".repeat(stars) + "☆".repeat(3 - stars)
-    : "☆☆☆";
-  $("#result-score-num").textContent = total;
-  $("#result-quote").textContent     = t("quote_" + stars);
+  const rank = pickRank(pct);
+  $('#rank-title').textContent = rank.title;
+  $('#rank-emoji').textContent = rank.emoji;
+  $('#result-score').textContent = state.score;
+  $('#percentile-num').textContent = pct;
+  setMascot($('#result-mascot'), rank.mascot);
 
-  showScreen("result");
+  showScreen('result');
+  if (pct >= 70) burstConfetti();
 }
 
-// ---------- Wire up ----------
-function bindEvents() {
-  document.body.addEventListener("click", (e) => {
-    const action = e.target.closest("[data-action]")?.dataset.action;
-    if (!action) return;
-    if (action === "goto-menu")  { renderMenu(); showScreen("menu"); }
-    if (action === "goto-title") { showScreen("title"); }
-    if (action === "play-again") { startDish(STATE.dishIndex); }
+function pickRank(pct) {
+  if (pct >= 90) return { title: 'Master Chef',         emoji: '👑', mascot: 'proud' };
+  if (pct >= 70) return { title: 'Pro Cook',            emoji: '🔥', mascot: 'happy' };
+  if (pct >= 50) return { title: 'Beginner',            emoji: '🍳', mascot: 'happy' };
+  return            { title: 'Mama Disappointed 😅',    emoji: '😤', mascot: 'angry' };
+}
+
+function burstConfetti() {
+  const stage = $('#screen-result');
+  const colors = ['#E53935', '#FFD600', '#00C853', '#fff'];
+  for (let i = 0; i < 40; i++) {
+    const c = document.createElement('div');
+    c.className = 'confetti';
+    c.style.left = `${Math.random() * 100}%`;
+    c.style.background = colors[Math.floor(Math.random() * colors.length)];
+    c.style.animationDuration = `${1.5 + Math.random() * 2}s`;
+    c.style.animationDelay = `${Math.random() * .5}s`;
+    c.style.transform = `rotate(${Math.random()*360}deg)`;
+    stage.appendChild(c);
+    setTimeout(() => c.remove(), 4000);
+  }
+}
+
+function initResult() {
+  $('#btn-claim').addEventListener('click', () => { haptic(); openLead(); });
+  $('#btn-replay').addEventListener('click', () => { haptic(); startGame(); });
+}
+
+/* =====================================================
+   6. LEAD CAPTURE
+   ===================================================== */
+function openLead()  { $('#lead-overlay').classList.add('show'); }
+function closeLead() { $('#lead-overlay').classList.remove('show'); }
+
+function initLead() {
+  $('#lead-close').addEventListener('click', closeLead);
+  $('#lead-overlay').addEventListener('click', (e) => {
+    if (e.target === $('#lead-overlay')) closeLead();
   });
 
-  $("#lang-toggle").addEventListener("click", () => {
-    STATE.lang = STATE.lang === "en" ? "zh" : "en";
-    applyI18n();
-    if (STATE.screen === "menu") renderMenu();
-    if (STATE.screen === "cook") {
-      // Refresh instruction text
-      const dish = DISHES[STATE.dishIndex];
-      const step = dish.steps[STATE.stepIndex];
-      if (step) $("#cook-instruction").textContent = t("instr_" + step.key);
-      $("#cook-dish-name").textContent = dish.name[STATE.lang];
-    }
-    if (STATE.screen === "result") {
-      const dish = DISHES[STATE.dishIndex];
-      $("#result-dish-name").textContent = dish.name[STATE.lang];
-    }
+  $('#lead-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const name  = $('#lead-name').value.trim();
+    const phone = $('#lead-phone').value.trim();
+    let valid = true;
+
+    if (name.length < 2) { flagInvalid($('#lead-name')); valid = false; }
+    // strip spaces/dashes for the digit check; keep optional leading +
+    const digits = phone.replace(/[\s\-]/g, '');
+    if (!/^\+?\d{7,15}$/.test(digits)) { flagInvalid($('#lead-phone')); valid = false; }
+
+    if (!valid) return;
+
+    // Persist locally so the merchant can collect from analytics later.
+    // Replace with a real POST to your CRM/WhatsApp API when wiring backend.
+    try {
+      const leads = JSON.parse(localStorage.getItem('tbc_leads') || '[]');
+      leads.push({
+        name, phone,
+        score: state.score,
+        percentile: state.percentile,
+        ts: new Date().toISOString(),
+      });
+      localStorage.setItem('tbc_leads', JSON.stringify(leads));
+    } catch (_) {}
+
+    haptic(20);
+    closeLead();
+    showShare();
   });
 }
 
-// ---------- Boot ----------
-function init() {
-  // Detect browser language
-  const nav = (navigator.language || "en").toLowerCase();
-  STATE.lang = nav.startsWith("zh") ? "zh" : "en";
-  applyI18n();
-  bindEvents();
-  showScreen("title");
+function flagInvalid(input) {
+  input.classList.add('invalid');
+  input.addEventListener('input', () => input.classList.remove('invalid'), { once: true });
 }
 
-document.addEventListener("DOMContentLoaded", init);
+/* =====================================================
+   7. SHARE SCREEN
+   ===================================================== */
+function showShare() {
+  $('#share-pct').textContent = state.percentile;
+  setMascot($('#share-mascot'), 'proud');
+  showScreen('share');
+}
+
+function initShare() {
+  $('#btn-share').addEventListener('click', async () => {
+    haptic();
+    const text = `🔥 I beat ${state.percentile}% of players in the Thai Blessing Cooking Challenge! Can you beat me?`;
+    const url = location.href;
+    if (navigator.share) {
+      try { await navigator.share({ title: 'Thai Blessing Challenge', text, url }); } catch (_) {}
+    } else {
+      copyToClipboard(`${text}\n${url}`);
+      flashBtn($('#btn-share'), 'COPIED!');
+    }
+  });
+
+  $('#btn-copy').addEventListener('click', () => {
+    haptic();
+    const text = `🔥 I beat ${state.percentile}% of players! ${location.href}`;
+    copyToClipboard(text);
+    flashBtn($('#btn-copy'), '✅ Copied!');
+  });
+
+  $('#btn-restart').addEventListener('click', () => {
+    haptic();
+    showScreen('home');
+  });
+}
+
+function copyToClipboard(text) {
+  if (navigator.clipboard) navigator.clipboard.writeText(text).catch(() => fallbackCopy(text));
+  else fallbackCopy(text);
+}
+function fallbackCopy(text) {
+  const ta = document.createElement('textarea');
+  ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+  document.body.appendChild(ta); ta.select();
+  try { document.execCommand('copy'); } catch (_) {}
+  ta.remove();
+}
+function flashBtn(btn, label) {
+  const old = btn.textContent;
+  btn.textContent = label;
+  setTimeout(() => { btn.textContent = old; }, 1400);
+}
+
+/* =====================================================
+   UTIL
+   ===================================================== */
+function pointer(e) {
+  if (e.touches && e.touches[0]) return { x: e.touches[0].clientX, y: e.touches[0].clientY };
+  if (e.changedTouches && e.changedTouches[0]) return { x: e.changedTouches[0].clientX, y: e.changedTouches[0].clientY };
+  return { x: e.clientX, y: e.clientY };
+}
+function shuffled(arr) {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+function haptic(ms = 8) {
+  if (navigator.vibrate) navigator.vibrate(ms);
+}
+
+/* =====================================================
+   BOOT
+   ===================================================== */
+document.addEventListener('DOMContentLoaded', () => {
+  initHome();
+  initResult();
+  initLead();
+  initShare();
+});
+
+})();

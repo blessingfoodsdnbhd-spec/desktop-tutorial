@@ -1,48 +1,72 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%"  stop-color="#ffd6a5"/>
-      <stop offset="50%" stop-color="#ffadad"/>
-      <stop offset="100%" stop-color="#ffc8dd"/>
+    <radialGradient id="bg" cx="0.5" cy="0.4" r="0.8">
+      <stop offset="0%"  stop-color="#2a1414"/>
+      <stop offset="60%" stop-color="#170a0a"/>
+      <stop offset="100%" stop-color="#0a0606"/>
+    </radialGradient>
+    <linearGradient id="title" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FFD600"/>
+      <stop offset="100%" stop-color="#FF8A00"/>
     </linearGradient>
-    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
-      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-opacity="0.25"/>
+    <filter id="glow-red" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="14" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="glow-yellow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="10" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
   </defs>
 
   <rect width="1200" height="630" fill="url(#bg)"/>
 
-  <!-- Decorative emojis -->
-  <text x="80"   y="140" font-size="80" opacity="0.55">🌿</text>
-  <text x="1060" y="160" font-size="80" opacity="0.55">🍋</text>
-  <text x="100"  y="560" font-size="80" opacity="0.55">🌶️</text>
-  <text x="1060" y="560" font-size="80" opacity="0.55">🥭</text>
+  <!-- Neon blobs -->
+  <circle cx="200" cy="120" r="220" fill="#E53935" opacity="0.25" filter="url(#glow-red)"/>
+  <circle cx="1050" cy="540" r="200" fill="#FFD600" opacity="0.2"  filter="url(#glow-yellow)"/>
+  <circle cx="950"  cy="120" r="160" fill="#00C853" opacity="0.18" filter="url(#glow-yellow)"/>
 
-  <!-- Card -->
-  <g filter="url(#shadow)">
-    <rect x="180" y="120" width="840" height="400" rx="32" ry="32"
-          fill="#fff8e7" stroke="#f4a261" stroke-width="8"/>
-  </g>
+  <!-- Lanterns -->
+  <text x="80"  y="120" font-size="70">🏮</text>
+  <text x="1080" y="130" font-size="70">🏮</text>
+  <text x="120" y="540" font-size="60">🌶️</text>
+  <text x="1060" y="560" font-size="60">🍜</text>
 
-  <!-- Chef -->
-  <text x="600" y="245" font-size="120" text-anchor="middle">👩‍🍳</text>
+  <!-- Brand pill -->
+  <rect x="475" y="80" width="250" height="48" rx="24"
+        fill="#E53935" filter="url(#glow-red)"/>
+  <text x="600" y="113" text-anchor="middle"
+        font-family="Trebuchet MS, sans-serif" font-weight="bold"
+        font-size="22" fill="#fff">泰有福 · THAI BLESSING</text>
 
   <!-- Title -->
-  <text x="600" y="320" font-size="54" font-weight="bold" text-anchor="middle"
-        fill="#e63946" font-family="Trebuchet MS, sans-serif">
-    Chef Mali's Thai Kitchen
+  <text x="600" y="240" text-anchor="middle"
+        font-family="Trebuchet MS, sans-serif" font-weight="900"
+        font-size="92" fill="url(#title)" filter="url(#glow-yellow)">
+    🔥 Thai Cooking
   </text>
-  <text x="600" y="360" font-size="32" text-anchor="middle"
-        fill="#6b4423" font-family="Trebuchet MS, sans-serif">
-    瑪莉廚師的泰國廚房
+  <text x="600" y="330" text-anchor="middle"
+        font-family="Trebuchet MS, sans-serif" font-weight="900"
+        font-size="92" fill="#E53935" filter="url(#glow-red)">
+    CHALLENGE
   </text>
-
-  <!-- Dishes -->
-  <text x="600" y="450" font-size="80" text-anchor="middle">🍜  🦐  🍛  🥭</text>
 
   <!-- Tagline -->
-  <text x="600" y="500" font-size="22" text-anchor="middle"
-        fill="#6b4423" font-family="Trebuchet MS, sans-serif">
-    Cook 4 classic Thai dishes • 4 道經典泰國菜
+  <text x="600" y="400" text-anchor="middle"
+        font-family="Trebuchet MS, sans-serif" font-size="32"
+        fill="#fff8e7">
+    Can you beat 90% of players?
   </text>
+
+  <!-- Reward badge -->
+  <rect x="380" y="450" width="440" height="80" rx="40"
+        fill="#00C853" filter="url(#glow-yellow)"/>
+  <text x="600" y="503" text-anchor="middle"
+        font-family="Trebuchet MS, sans-serif" font-weight="bold"
+        font-size="34" fill="#0a2010">
+    🎁 Win RM10 Voucher
+  </text>
+
+  <!-- Footer dishes -->
+  <text x="600" y="590" text-anchor="middle" font-size="42">🌶️ 🥭 🦐 🍜 🍋 🥥</text>
 </svg>

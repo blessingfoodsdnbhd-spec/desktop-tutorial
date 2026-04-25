@@ -45,7 +45,9 @@ const I18N = {
     good: "Good!",
     nice: "Nice!",
     miss: "Miss!",
-    timeup: "Time's up!"
+    timeup: "Time's up!",
+    need: "Need",
+    wrong: "Wrong!"
   },
   zh: {
     title: "瑪莉廚師的泰國廚房",
@@ -85,7 +87,9 @@ const I18N = {
     good: "不錯！",
     nice: "可以！",
     miss: "失誤！",
-    timeup: "時間到！"
+    timeup: "時間到！",
+    need: "需要",
+    wrong: "錯了！"
   }
 };
 
@@ -98,10 +102,14 @@ const DISHES = [
     name: { en: "Pad Thai", zh: "泰式炒河粉" },
     desc: { en: "Stir-fried rice noodles", zh: "炒河粉" },
     plateBase: "🍜",
+    soupColor: "#f4a261",
     steps: [
       { type: "chop",   key: "chop",  pieces: ["🧅","🧄","🥜","🥬"], duration: 8000 },
       { type: "tap",    key: "stir",  emoji: "🍳", target: 35, duration: 6000 },
-      { type: "drag",   key: "plate", items: ["🍤","🥜","🍋","🌶️","🥚"], duration: 12000 }
+      { type: "drag",   key: "plate",
+        items:  ["🍤","🥜","🍋","🌶️","🥚"],
+        decoys: ["🍌","🍫","🥦"],
+        duration: 14000 }
     ]
   },
   {
@@ -110,9 +118,13 @@ const DISHES = [
     name: { en: "Tom Yum Goong", zh: "冬蔭功" },
     desc: { en: "Spicy & sour shrimp soup", zh: "酸辣蝦湯" },
     plateBase: "🍲",
+    soupColor: "#d93728",
     steps: [
       { type: "timing", key: "boil",  speed: 1.4, duration: 10000 },
-      { type: "drag",   key: "herbs", items: ["🌿","🍋","🌶️","🧄"], duration: 10000 },
+      { type: "drag",   key: "herbs",
+        items:  ["🌿","🍋","🌶️","🧄"],
+        decoys: ["🍓","🍫","🥑"],
+        duration: 12000 },
       { type: "tap",    key: "squeeze", emoji: "🍋", target: 30, duration: 5000 }
     ]
   },
@@ -122,10 +134,14 @@ const DISHES = [
     name: { en: "Green Curry", zh: "綠咖哩" },
     desc: { en: "Coconut curry with chicken", zh: "椰汁雞肉咖哩" },
     plateBase: "🍛",
+    soupColor: "#94c47d",
     steps: [
       { type: "tap",    key: "pound", emoji: "🌿", target: 40, duration: 6000 },
       { type: "timing", key: "pour",  speed: 1.0, duration: 9000 },
-      { type: "drag",   key: "basil", items: ["🍗","🌿","🍆","🌶️"], duration: 10000 }
+      { type: "drag",   key: "basil",
+        items:  ["🍗","🌿","🍆","🌶️"],
+        decoys: ["🍩","🍇","🥨"],
+        duration: 12000 }
     ]
   },
   {
@@ -134,10 +150,14 @@ const DISHES = [
     name: { en: "Mango Sticky Rice", zh: "芒果糯米飯" },
     desc: { en: "Sweet rice & ripe mango", zh: "甜糯米配芒果" },
     plateBase: "🍚",
+    soupColor: "#fff3c4",
     steps: [
       { type: "chop", key: "slice", pieces: ["🥭","🥭","🥭","🥭"], duration: 7000 },
       { type: "tap",  key: "mix",   emoji: "🥥", target: 30, duration: 5000 },
-      { type: "drag", key: "plate", items: ["🥭","🥥","🍯","🌸"], duration: 10000 }
+      { type: "drag", key: "plate",
+        items:  ["🥭","🥥","🍯","🌸"],
+        decoys: ["🥩","🌶️","🧅"],
+        duration: 12000 }
     ]
   }
 ];
@@ -161,6 +181,14 @@ const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
 const t  = (k) => I18N[STATE.lang][k] || k;
 const clamp = (n, lo, hi) => Math.max(lo, Math.min(hi, n));
 const rand  = (lo, hi) => Math.random() * (hi - lo) + lo;
+function shuffle(arr) {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
 
 function showScreen(name) {
   $$(".screen").forEach((s) => s.classList.remove("active"));
@@ -289,6 +317,12 @@ function finishStep() {
 // ---------- Mini-game: CHOP ----------
 function miniChop(step) {
   const stage = $("#cook-stage");
+
+  // Cutting board background
+  const board = document.createElement("div");
+  board.className = "cutting-board";
+  stage.appendChild(board);
+
   const total = step.pieces.length;
   let hit = 0;
 
@@ -414,35 +448,75 @@ function miniTiming(step) {
   STATE.cleanup = () => clearInterval(interval);
 }
 
-// ---------- Mini-game: DRAG ----------
+// ---------- Mini-game: DRAG (cooking pot with recipe + decoys) ----------
 function miniDrag(step) {
   const stage = $("#cook-stage");
   const dish = DISHES[STATE.dishIndex];
 
-  const target = document.createElement("div");
-  target.className = "drag-target";
-  target.dataset.placed = "0";
-  target.innerHTML = `<span class="placed-emoji">${dish.plateBase}</span>`;
-  stage.appendChild(target);
+  const correctList = step.items.slice();
+  const decoyList   = (step.decoys || []).slice();
+  const totalCorrect = correctList.length;
 
+  // Recipe banner (shows what ingredients are needed)
+  const banner = document.createElement("div");
+  banner.className = "recipe-banner";
+  const label = document.createElement("span");
+  label.className = "recipe-label";
+  label.textContent = t("need") + ":";
+  banner.appendChild(label);
+  correctList.forEach((emoji) => {
+    const r = document.createElement("span");
+    r.className = "recipe-item";
+    r.dataset.emoji = emoji;
+    r.textContent = emoji;
+    banner.appendChild(r);
+  });
+  stage.appendChild(banner);
+
+  // Pot drop target
+  const target = document.createElement("div");
+  target.className = "drag-target is-pot";
+  target.style.setProperty("--soup-color", dish.soupColor || "#f4a261");
+  target.innerHTML = `
+    <div class="pot-handle-l"></div>
+    <div class="pot-handle-r"></div>
+    <div class="pot-rim"></div>
+    <div class="pot-body"></div>
+    <div class="pot-soup"></div>
+    <div class="pot-steam">♨️</div>
+    <div class="pot-contents"></div>
+  `;
+  stage.appendChild(target);
+  const contents = target.querySelector(".pot-contents");
+
+  // Tray with shuffled correct + decoy items
+  const trayItems = shuffle([
+    ...correctList.map((e) => ({ emoji: e, correct: true })),
+    ...decoyList.map((e)   => ({ emoji: e, correct: false }))
+  ]);
   const tray = document.createElement("div");
   tray.className = "drag-tray";
-  step.items.forEach((emoji) => {
+  trayItems.forEach(({ emoji, correct }) => {
     const el = document.createElement("div");
     el.className = "drag-item";
     el.textContent = emoji;
     tray.appendChild(el);
-    enableDrag(el, target, emoji);
+    enableDrag(el, target, emoji, correct);
   });
   stage.appendChild(tray);
 
-  const total = step.items.length;
   let placed = 0;
 
-  function enableDrag(el, dropTarget, emoji) {
+  function markCollected(emoji) {
+    const r = banner.querySelector(`.recipe-item[data-emoji="${emoji}"]:not(.collected)`);
+    if (r) r.classList.add("collected");
+  }
+
+  function enableDrag(el, dropTarget, emoji, isCorrect) {
     let ghost = null;
     const onDown = (e) => {
       e.preventDefault();
+      if (el.classList.contains("placed")) return;
       const point = (e.touches ? e.touches[0] : e);
       ghost = document.createElement("div");
       ghost.className = "drag-ghost";
@@ -468,18 +542,33 @@ function miniDrag(step) {
         const inside =
           p.clientX >= rect.left && p.clientX <= rect.right &&
           p.clientY >= rect.top  && p.clientY <= rect.bottom;
-        if (inside && !el.classList.contains("placed")) {
-          el.classList.add("placed");
-          placed++;
-          const placedEl = document.createElement("span");
-          placedEl.className = "placed-emoji";
-          placedEl.textContent = emoji;
-          dropTarget.appendChild(placedEl);
-          const gain = Math.round(100 / total);
-          setScore(STATE.currentScore + gain);
-          const r = stage.getBoundingClientRect();
-          flash("+" + gain, p.clientX - r.left, p.clientY - r.top);
-          if (placed >= total) setTimeout(finishStep, 350);
+        const r = stage.getBoundingClientRect();
+
+        if (inside) {
+          if (isCorrect && !el.classList.contains("placed")) {
+            el.classList.add("placed");
+            placed++;
+            const placedEl = document.createElement("span");
+            placedEl.className = "placed-emoji";
+            placedEl.textContent = emoji;
+            contents.appendChild(placedEl);
+            markCollected(emoji);
+            const gain = Math.round(100 / totalCorrect);
+            setScore(STATE.currentScore + gain);
+            flash("+" + gain, p.clientX - r.left, p.clientY - r.top);
+            if (placed >= totalCorrect) setTimeout(finishStep, 400);
+          } else if (!isCorrect) {
+            el.classList.add("shake");
+            setTimeout(() => el.classList.remove("shake"), 450);
+            if (!el.classList.contains("tried-wrong")) {
+              el.classList.add("tried-wrong");
+              const penalty = 15;
+              setScore(Math.max(0, STATE.currentScore - penalty));
+              flash("-" + penalty, p.clientX - r.left, p.clientY - r.top, true);
+            } else {
+              flash(t("wrong"), p.clientX - r.left, p.clientY - r.top, true);
+            }
+          }
         }
         dropTarget.classList.remove("hover");
         if (ghost) { ghost.remove(); ghost = null; }

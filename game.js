@@ -6,8 +6,8 @@
 // ---------- i18n ----------
 const I18N = {
   en: {
-    title: "Chef Mali's Thai Kitchen",
-    subtitle: "Cook 4 classic Thai dishes!",
+    title: "Thai Cooking Game",
+    subtitle: "Cook 4 classic Thai dishes with us!",
     start: "Start Cooking",
     hint: "Tip: Use mouse / tap. Have fun!",
     pick_dish: "Pick a Dish",
@@ -17,7 +17,7 @@ const I18N = {
     final_score: "Final Score",
     play_again: "Play Again",
     other_dish: "Try Another Dish",
-    footer: "Made with 🌶️ — an original Thai cooking mini-game",
+    footer: "© 泰有福 Thai Blessing Food · Cooking Game",
 
     // Quotes by stars
     quote_3: "Aroi mak mak! Absolutely delicious! ⭐",
@@ -50,8 +50,8 @@ const I18N = {
     wrong: "Wrong!"
   },
   zh: {
-    title: "瑪莉廚師的泰國廚房",
-    subtitle: "來煮 4 道經典泰國菜！",
+    title: "泰式料理小遊戲",
+    subtitle: "和泰有福一起煮 4 道經典泰國菜！",
     start: "開始下廚",
     hint: "提示：用滑鼠或觸控操作，玩得開心！",
     pick_dish: "選一道菜",
@@ -61,7 +61,7 @@ const I18N = {
     final_score: "最終分數",
     play_again: "再玩一次",
     other_dish: "換一道菜",
-    footer: "用 🌶️ 做的 — 原創泰式料理小遊戲",
+    footer: "© 泰有福 Thai Blessing Food · 料理小遊戲",
 
     quote_3: "阿羅伊馬！超級美味！⭐",
     quote_2: "還不錯～繼續加油！",

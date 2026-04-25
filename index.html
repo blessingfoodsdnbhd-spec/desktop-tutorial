@@ -9,25 +9,25 @@
   <meta name="apple-mobile-web-app-title" content="Thai Kitchen" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 
-  <title>Chef Mali's Thai Kitchen 瑪莉廚師的泰國廚房</title>
-  <meta name="description" content="Cook 4 classic Thai dishes — Pad Thai, Tom Yum, Green Curry, Mango Sticky Rice. 來煮 4 道經典泰國菜！" />
+  <title>泰有福 Thai Blessing Food — Cooking Game</title>
+  <meta name="description" content="泰有福 Thai Blessing Food 泰式料理小遊戲：來煮 4 道經典泰國菜！Pad Thai, Tom Yum, Green Curry, Mango Sticky Rice." />
 
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="Chef Mali's Thai Kitchen 瑪莉廚師的泰國廚房" />
-  <meta property="og:description" content="A cute web cooking mini-game. Cook 4 classic Thai dishes! 4 道泰國菜小遊戲，手機也能玩。" />
+  <meta property="og:title" content="泰有福 Thai Blessing Food — Cooking Game" />
+  <meta property="og:description" content="泰有福出品的泰式料理小遊戲，來煮 4 道經典泰國菜，手機也能玩！A cute Thai cooking mini-game from Thai Blessing Food." />
   <meta property="og:image" content="poster.svg" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Chef Mali's Thai Kitchen 瑪莉廚師的泰國廚房" />
-  <meta name="twitter:description" content="A cute web cooking mini-game. 4 道泰國菜小遊戲。" />
+  <meta name="twitter:title" content="泰有福 Thai Blessing Food — Cooking Game" />
+  <meta name="twitter:description" content="泰式料理小遊戲，4 道菜，手機也能玩。" />
   <meta name="twitter:image" content="poster.svg" />
 
   <!-- Favicon (emoji) -->
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌶️</text></svg>" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2248%22 fill=%22%231f5f1f%22/><text y=%22.93em%22 font-size=%2275%22 x=%2213%22>🐘</text></svg>" />
 
   <link rel="stylesheet" href="styles.css" />
 </head>
@@ -35,8 +35,11 @@
   <div id="app">
     <header class="topbar">
       <div class="logo">
-        <span class="logo-emoji">🌶️</span>
-        <span class="logo-text" data-i18n="title">Chef Mali's Thai Kitchen</span>
+        <span class="logo-mark" aria-hidden="true">🐘</span>
+        <span class="logo-text">
+          <span class="brand-zh">泰有福</span>
+          <span class="brand-en">Thai Blessing Food</span>
+        </span>
       </div>
       <button id="lang-toggle" class="lang-btn" aria-label="Switch language">EN / 中文</button>
     </header>
@@ -45,8 +48,8 @@
       <!-- TITLE SCREEN -->
       <section id="screen-title" class="screen active">
         <div class="title-card">
-          <div class="chef-avatar">👩‍🍳</div>
-          <h1 data-i18n="title">Chef Mali's Thai Kitchen</h1>
+          <img class="brand-logo" src="logo.svg" alt="泰有福 Thai Blessing Food" />
+          <h1 data-i18n="title">Thai Cooking Game</h1>
           <p class="subtitle" data-i18n="subtitle">Cook 4 classic Thai dishes!</p>
           <button class="big-btn" data-action="goto-menu" data-i18n="start">Start Cooking</button>
           <p class="hint" data-i18n="hint">Tip: Use mouse / tap. Have fun!</p>
@@ -113,7 +116,7 @@
     </main>
 
     <footer class="bottombar">
-      <span data-i18n="footer">Made with 🌶️ — an original Thai cooking mini-game</span>
+      <span data-i18n="footer">© 泰有福 Thai Blessing Food · Cooking Game</span>
     </footer>
   </div>
 

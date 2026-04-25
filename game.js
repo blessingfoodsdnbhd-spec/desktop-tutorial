@@ -452,6 +452,7 @@ function miniDrag(step) {
       document.body.appendChild(ghost);
 
       const onMove = (ev) => {
+        if (ev.touches) ev.preventDefault();
         const p = ev.touches ? ev.touches[0] : ev;
         ghost.style.left = p.clientX + "px";
         ghost.style.top  = p.clientY + "px";

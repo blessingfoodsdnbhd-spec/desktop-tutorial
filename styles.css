@@ -21,6 +21,16 @@ html, body {
   background: linear-gradient(135deg, #ffd6a5 0%, #ffadad 50%, #ffc8dd 100%);
   color: var(--thai-brown);
   overflow-x: hidden;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-text-size-adjust: 100%;
+  touch-action: manipulation;
+  overscroll-behavior: contain;
+}
+
+button, .dish-card, .target, .tap-zone, .drag-item, .lang-btn {
+  touch-action: manipulation;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 #app {
@@ -509,8 +519,54 @@ html, body {
 
 /* ===== Responsive ===== */
 @media (max-width: 600px) {
-  .title-card h1 { font-size: 1.4rem; }
+  #app { padding: 0 10px; }
+  .topbar { padding: 10px 4px; }
+  .logo { font-size: 1rem; }
+  .logo-emoji { font-size: 1.3rem; }
+  .lang-btn { padding: 5px 10px; font-size: 0.85rem; }
+
+  .title-card { padding: 24px 18px; }
+  .title-card h1 { font-size: 1.3rem; }
+  .subtitle { font-size: 0.9rem; }
+  .chef-avatar { font-size: 4rem; }
+  .deco { font-size: 1.8rem; }
+
+  .stage { min-height: 340px; border-width: 3px; }
+  .tap-emoji { font-size: 4.2rem; }
+  .tap-fill-wrap { width: 80%; height: 22px; }
+
+  .target { font-size: 2.2rem; }
+
+  .drag-target {
+    width: 170px;
+    height: 170px;
+    top: 28%;
+    border-width: 4px;
+  }
+  .drag-item {
+    width: 52px;
+    height: 52px;
+    font-size: 2rem;
+  }
+  .drag-tray { gap: 8px; }
+  .placed-emoji { font-size: 1.8rem; }
+
+  .timing-track { left: 6%; right: 6%; height: 50px; }
+  .timing-stage-extras { font-size: 3.5rem; top: 8%; }
+
+  .instruction-bar { font-size: 0.95rem; padding: 10px; }
+  .cook-header { padding: 10px 12px; font-size: 0.95rem; }
+  .cook-emoji { font-size: 1.5rem; }
+
+  .big-btn { padding: 12px 24px; font-size: 1rem; }
+  .result-card { padding: 24px 18px; }
+  .result-emoji { font-size: 4.5rem; }
+  .stars { font-size: 2rem; }
+}
+
+/* Very small screens */
+@media (max-width: 360px) {
+  .drag-target { width: 150px; height: 150px; }
+  .drag-item { width: 46px; height: 46px; font-size: 1.7rem; }
   .stage { min-height: 320px; }
-  .deco { font-size: 2rem; }
-  .tap-emoji { font-size: 4.5rem; }
 }

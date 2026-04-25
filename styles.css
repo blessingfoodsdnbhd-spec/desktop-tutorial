@@ -105,6 +105,11 @@ button, .dish-card, .target, .tap-zone, .drag-item, .lang-btn {
   transition: transform 0.15s;
 }
 .lang-btn:hover { transform: scale(1.05); background: #fff; }
+.sound-btn { padding: 6px 10px; margin-right: 6px; min-width: 40px; }
+.sound-btn.muted { opacity: 0.55; }
+.topbar { gap: 6px; }
+.topbar > .logo { flex: 1; min-width: 0; }
+.topbar > .lang-btn, .topbar > .sound-btn { flex-shrink: 0; }
 
 /* ===== Screens ===== */
 #screens { flex: 1; position: relative; padding: 20px 0; }

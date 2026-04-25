@@ -342,12 +342,13 @@ function miniChop(step) {
       if (el.classList.contains("popped")) return;
       el.classList.add("popped");
       hit++;
+      Sound.chop();
       const gain = Math.round(100 / total);
       setScore(STATE.currentScore + gain);
       const r = stage.getBoundingClientRect();
       flash("+" + gain, e.clientX - r.left, e.clientY - r.top);
       if (hit >= total) {
-        // bonus for finishing fast
+        Sound.ding();
         setTimeout(finishStep, 300);
       }
     });
@@ -375,6 +376,7 @@ function miniTap(step) {
 
   const onTap = (e) => {
     taps++;
+    Sound.tap();
     const pct = clamp((taps / step.target) * 100, 0, 100);
     fill.style.width = pct + "%";
     setScore(Math.round(pct));
@@ -385,6 +387,7 @@ function miniTap(step) {
       flash("+1", (e.clientX || 0) - r.left, (e.clientY || 0) - r.top);
     }
     if (taps >= step.target) {
+      Sound.ding();
       setTimeout(finishStep, 300);
     }
   };
@@ -440,6 +443,7 @@ function miniTiming(step) {
       score = 20;  label = t("miss");
     }
     setScore(score);
+    if (score >= 70) Sound.good(); else Sound.bad();
     const r = stage.getBoundingClientRect();
     flash(label + " +" + score, r.width / 2, r.height / 2, score < 50);
     setTimeout(finishStep, 700);
@@ -548,6 +552,7 @@ function miniDrag(step) {
           if (isCorrect && !el.classList.contains("placed")) {
             el.classList.add("placed");
             placed++;
+            Sound.good();
             const placedEl = document.createElement("span");
             placedEl.className = "placed-emoji";
             placedEl.textContent = emoji;
@@ -556,8 +561,12 @@ function miniDrag(step) {
             const gain = Math.round(100 / totalCorrect);
             setScore(STATE.currentScore + gain);
             flash("+" + gain, p.clientX - r.left, p.clientY - r.top);
-            if (placed >= totalCorrect) setTimeout(finishStep, 400);
+            if (placed >= totalCorrect) {
+              Sound.ding();
+              setTimeout(finishStep, 400);
+            }
           } else if (!isCorrect) {
+            Sound.bad();
             el.classList.add("shake");
             setTimeout(() => el.classList.remove("shake"), 450);
             if (!el.classList.contains("tried-wrong")) {
@@ -609,6 +618,10 @@ function showResult() {
   $("#result-score-num").textContent = total;
   $("#result-quote").textContent     = t("quote_" + stars);
 
+  if (stars >= 2) Sound.win();
+  else if (stars === 1) Sound.ding();
+  else Sound.bad();
+
   showScreen("result");
 }
 
@@ -617,6 +630,10 @@ function bindEvents() {
   document.body.addEventListener("click", (e) => {
     const action = e.target.closest("[data-action]")?.dataset.action;
     if (!action) return;
+    Sound.init();
+    Sound.resume();
+    Sound.tap();
+    if (Sound.musicOn && !Sound.musicTimer) Sound.startMusic();
     if (action === "goto-menu")  { renderMenu(); showScreen("menu"); }
     if (action === "goto-title") { showScreen("title"); }
     if (action === "play-again") { startDish(STATE.dishIndex); }
@@ -638,6 +655,26 @@ function bindEvents() {
       $("#result-dish-name").textContent = dish.name[STATE.lang];
     }
   });
+
+  const soundBtn = $("#sound-toggle");
+  const setBtnState = (muted) => {
+    soundBtn.textContent = muted ? "🔇" : "🔊";
+    soundBtn.classList.toggle("muted", muted);
+  };
+  soundBtn.addEventListener("click", () => {
+    Sound.init();
+    Sound.resume();
+    const newMuted = Sound.musicOn; // currently on → going to mute
+    Sound.setMuted(newMuted);
+    setBtnState(newMuted);
+  });
+  // Apply saved preference
+  const savedMuted = Sound.loadPref();
+  if (savedMuted) {
+    Sound.musicOn = false;
+    Sound.sfxOn   = false;
+  }
+  setBtnState(savedMuted);
 }
 
 // ---------- Boot ----------

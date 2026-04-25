@@ -19,69 +19,110 @@
 'use strict';
 
 /* =====================================================
-   1. MASCOT — Mama Thai Blessing
-   Single SVG body, swap face by expression.
+   1. MASCOT — Mama Thai Blessing (elephant chef)
+   Brand: 泰有福 Thai Blessing Food.
+   Single SVG body, expression block swaps face + trunk pose.
    ===================================================== */
+
+// Brand greens (matched to Thai Blessing Food logo)
+const ELE_BODY  = '#2C7A3D';
+const ELE_DARK  = '#1B5C2E';
+const ELE_INNER = '#f2a3a3';
+
 const MASCOT_FACES = {
   happy: `
-    <!-- happy: smile + sparkle eyes -->
-    <ellipse cx="38" cy="58" rx="3.5" ry="4" fill="#1a1a1a"/>
-    <ellipse cx="62" cy="58" rx="3.5" ry="4" fill="#1a1a1a"/>
-    <circle cx="36.5" cy="56.5" r="1" fill="#fff"/>
-    <circle cx="60.5" cy="56.5" r="1" fill="#fff"/>
-    <path d="M40 70 Q50 78 60 70" stroke="#1a1a1a" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-    <circle cx="30" cy="65" r="3" fill="#ff8a8a" opacity=".7"/>
-    <circle cx="70" cy="65" r="3" fill="#ff8a8a" opacity=".7"/>`,
+    <!-- eyes: sparkle dots -->
+    <ellipse cx="38" cy="58" rx="3" ry="3.5" fill="#1a1a1a"/>
+    <ellipse cx="62" cy="58" rx="3" ry="3.5" fill="#1a1a1a"/>
+    <circle cx="37" cy="56.5" r="1" fill="#fff"/>
+    <circle cx="61" cy="56.5" r="1" fill="#fff"/>
+    <!-- cheek blush -->
+    <circle cx="28" cy="68" r="3" fill="#ff8a8a" opacity=".55"/>
+    <circle cx="72" cy="68" r="3" fill="#ff8a8a" opacity=".55"/>
+    <!-- tusks -->
+    <path d="M44 78 L42 84" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+    <path d="M56 78 L58 84" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+    <!-- trunk: happy curl -->
+    <path d="M50 76 Q50 86 44 90 Q39 94 44 98 Q52 100 56 94"
+          stroke="${ELE_BODY}" stroke-width="9" fill="none" stroke-linecap="round"/>
+    <path d="M50 76 Q50 86 44 90 Q39 94 44 98 Q52 100 56 94"
+          stroke="${ELE_DARK}" stroke-width="6" fill="none" stroke-linecap="round" opacity=".4"/>`,
 
   shocked: `
-    <!-- shocked: O mouth + wide eyes -->
+    <!-- shocked: wide eyes -->
     <circle cx="38" cy="58" r="5" fill="#fff" stroke="#1a1a1a" stroke-width="1.5"/>
     <circle cx="62" cy="58" r="5" fill="#fff" stroke="#1a1a1a" stroke-width="1.5"/>
     <circle cx="38" cy="58" r="2.5" fill="#1a1a1a"/>
     <circle cx="62" cy="58" r="2.5" fill="#1a1a1a"/>
-    <ellipse cx="50" cy="73" rx="4" ry="6" fill="#1a1a1a"/>`,
+    <!-- tusks -->
+    <path d="M43 78 L41 85" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+    <path d="M57 78 L59 85" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+    <!-- trunk: dropped straight + open tip -->
+    <path d="M50 76 L50 100"
+          stroke="${ELE_BODY}" stroke-width="9" stroke-linecap="round"/>
+    <ellipse cx="50" cy="100" rx="3.5" ry="4.5" fill="#1a1a1a"/>`,
 
   angry: `
-    <!-- angry but funny: angled brows + frown -->
+    <!-- angry brows + eyes -->
     <path d="M32 52 L44 56" stroke="#1a1a1a" stroke-width="3" stroke-linecap="round"/>
     <path d="M68 52 L56 56" stroke="#1a1a1a" stroke-width="3" stroke-linecap="round"/>
     <ellipse cx="38" cy="60" rx="3" ry="3.5" fill="#1a1a1a"/>
     <ellipse cx="62" cy="60" rx="3" ry="3.5" fill="#1a1a1a"/>
-    <path d="M40 75 Q50 68 60 75" stroke="#1a1a1a" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-    <circle cx="28" cy="62" r="3" fill="#ff5555" opacity=".8"/>
-    <circle cx="72" cy="62" r="3" fill="#ff5555" opacity=".8"/>`,
+    <!-- steam puffs -->
+    <circle cx="22" cy="48" r="3" fill="#ff5555" opacity=".75"/>
+    <circle cx="78" cy="48" r="3" fill="#ff5555" opacity=".75"/>
+    <!-- tusks -->
+    <path d="M44 78 L42 84" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+    <path d="M56 78 L58 84" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+    <!-- trunk: tightly curled (annoyed) -->
+    <path d="M50 76 Q62 84 56 92 Q46 98 56 104"
+          stroke="${ELE_BODY}" stroke-width="9" fill="none" stroke-linecap="round"/>`,
 
   proud: `
-    <!-- proud: closed-eye smile + sparkles -->
+    <!-- closed-eye smile -->
     <path d="M33 58 Q38 53 43 58" stroke="#1a1a1a" stroke-width="2.5" fill="none" stroke-linecap="round"/>
     <path d="M57 58 Q62 53 67 58" stroke="#1a1a1a" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-    <path d="M38 70 Q50 80 62 70" stroke="#1a1a1a" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-    <circle cx="30" cy="65" r="3" fill="#ff8a8a" opacity=".7"/>
-    <circle cx="70" cy="65" r="3" fill="#ff8a8a" opacity=".7"/>
-    <text x="20" y="35" font-size="14">✨</text>
-    <text x="72" y="35" font-size="14">✨</text>`,
+    <!-- cheeks -->
+    <circle cx="28" cy="68" r="3" fill="#ff8a8a" opacity=".55"/>
+    <circle cx="72" cy="68" r="3" fill="#ff8a8a" opacity=".55"/>
+    <!-- sparkles -->
+    <text x="14" y="34" font-size="13">✨</text>
+    <text x="78" y="34" font-size="13">✨</text>
+    <!-- tusks -->
+    <path d="M44 78 L42 84" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+    <path d="M56 78 L58 84" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+    <!-- trunk: raised triumphantly + sparkle puff -->
+    <path d="M50 76 Q70 78 76 62 Q78 52 68 50"
+          stroke="${ELE_BODY}" stroke-width="9" fill="none" stroke-linecap="round"/>
+    <circle cx="66" cy="48" r="2" fill="#FFD600"/>
+    <circle cx="72" cy="44" r="1.5" fill="#FFD600"/>`,
 };
 
-/** Render mascot SVG with given expression. */
+/** Render the elephant-chef mascot SVG with given expression. */
 function mascotSVG(expression = 'happy') {
   return `
     <svg viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg">
-      <!-- headband -->
+      <!-- ears (back layer) -->
+      <ellipse cx="14" cy="62" rx="13" ry="20" fill="${ELE_BODY}"/>
+      <ellipse cx="86" cy="62" rx="13" ry="20" fill="${ELE_BODY}"/>
+      <ellipse cx="14" cy="64" rx="7" ry="12" fill="${ELE_INNER}" opacity=".6"/>
+      <ellipse cx="86" cy="64" rx="7" ry="12" fill="${ELE_INNER}" opacity=".6"/>
+      <!-- head -->
+      <ellipse cx="50" cy="60" rx="28" ry="28" fill="${ELE_BODY}"/>
+      <!-- subtle head shading -->
+      <ellipse cx="50" cy="68" rx="22" ry="14" fill="${ELE_DARK}" opacity=".15"/>
+      <!-- chef headband -->
       <path d="M22 42 Q50 30 78 42 L78 50 Q50 42 22 50 Z" fill="#E53935"/>
       <circle cx="32" cy="40" r="3" fill="#FFD600"/>
       <circle cx="50" cy="36" r="3" fill="#FFD600"/>
       <circle cx="68" cy="40" r="3" fill="#FFD600"/>
-      <!-- hair tuft -->
-      <path d="M40 36 Q50 22 60 36" fill="#1a1a1a"/>
-      <!-- face -->
-      <ellipse cx="50" cy="62" rx="28" ry="30" fill="#ffd9b3"/>
+      <!-- expression: face features + trunk pose -->
       ${MASCOT_FACES[expression] || MASCOT_FACES.happy}
       <!-- body / apron -->
-      <path d="M22 92 Q50 88 78 92 L82 118 L18 118 Z" fill="#fff"/>
-      <path d="M30 92 L30 118 M70 92 L70 118" stroke="#E53935" stroke-width="2"/>
-      <text x="38" y="110" font-size="11" fill="#E53935" font-weight="bold">CHEF</text>
-      <!-- apron strap -->
-      <path d="M40 92 L48 86 L52 86 L60 92" stroke="#E53935" stroke-width="2.5" fill="none"/>
+      <path d="M22 95 Q50 92 78 95 L82 120 L18 120 Z" fill="#fff"/>
+      <path d="M30 95 L30 120 M70 95 L70 120" stroke="#E53935" stroke-width="2"/>
+      <text x="33" y="113" font-size="9" fill="#E53935" font-weight="bold" font-family="sans-serif">泰有福</text>
+      <path d="M40 95 L48 89 L52 89 L60 95" stroke="#E53935" stroke-width="2.5" fill="none"/>
     </svg>`;
 }
 

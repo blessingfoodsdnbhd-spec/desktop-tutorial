@@ -289,6 +289,12 @@ function finishStep() {
 // ---------- Mini-game: CHOP ----------
 function miniChop(step) {
   const stage = $("#cook-stage");
+
+  // Cutting board background
+  const board = document.createElement("div");
+  board.className = "cutting-board";
+  stage.appendChild(board);
+
   const total = step.pieces.length;
   let hit = 0;
 

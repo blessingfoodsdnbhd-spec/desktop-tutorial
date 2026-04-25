@@ -289,12 +289,62 @@ button, .dish-card, .target, .tap-zone, .drag-item, .lang-btn {
 }
 
 /* ===== Stage elements ===== */
+.cutting-board {
+  position: absolute;
+  inset: 6%;
+  border-radius: 14px;
+  background:
+    repeating-linear-gradient(
+      92deg,
+      rgba(80, 45, 20, 0.18) 0px,
+      rgba(80, 45, 20, 0.18) 2px,
+      transparent 2px,
+      transparent 26px),
+    repeating-linear-gradient(
+      88deg,
+      rgba(255, 230, 200, 0.08) 0px,
+      rgba(255, 230, 200, 0.08) 1px,
+      transparent 1px,
+      transparent 14px),
+    linear-gradient(180deg, #d49b65 0%, #b1763f 60%, #8c5a2b 100%);
+  box-shadow:
+    inset 0 0 0 5px #6b4423,
+    inset 0 0 0 8px #a3793f,
+    inset 0 0 40px rgba(0, 0, 0, 0.25),
+    0 6px 14px rgba(0, 0, 0, 0.15);
+  z-index: 0;
+}
+.cutting-board::before {
+  /* hanging hole */
+  content: "";
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #4a2d15;
+  box-shadow: inset 0 2px 3px rgba(0, 0, 0, 0.6);
+}
+.cutting-board::after {
+  content: "🔪";
+  position: absolute;
+  bottom: 6px;
+  right: 10px;
+  font-size: 2.2rem;
+  transform: rotate(28deg);
+  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.3));
+}
+
 .target {
   position: absolute;
   font-size: 2.5rem;
   cursor: pointer;
   transition: transform 0.1s;
   user-select: none;
+  z-index: 2;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.25));
 }
 .target:hover { transform: scale(1.1); }
 .target.popped {

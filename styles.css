@@ -9,6 +9,9 @@
   --thai-brown: #6b4423;
   --thai-pink: #ff8fa3;
   --thai-purple: #7b2cbf;
+  --brand-green: #1f5f1f;
+  --brand-green-dark: #0f4f0f;
+  --brand-gold: #b89968;
   --shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.2);
   --radius: 16px;
@@ -54,11 +57,41 @@ button, .dish-card, .target, .tap-zone, .drag-item, .lang-btn {
 .logo {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   font-weight: bold;
-  font-size: 1.1rem;
+  font-size: 1.05rem;
+  min-width: 0;
 }
-.logo-emoji { font-size: 1.6rem; }
+.logo-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 40%, var(--brand-green) 0%, var(--brand-green-dark) 100%);
+  font-size: 1.4rem;
+  flex-shrink: 0;
+  border: 2px solid #0a3a0a;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+.logo-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+  min-width: 0;
+}
+.brand-zh {
+  color: #1a1a1a;
+  font-size: 1.05rem;
+  letter-spacing: 1px;
+}
+.brand-en {
+  color: var(--brand-gold);
+  font-size: 0.7rem;
+  letter-spacing: 1.5px;
+  font-weight: 600;
+}
 
 .lang-btn {
   background: var(--thai-cream);
@@ -72,6 +105,11 @@ button, .dish-card, .target, .tap-zone, .drag-item, .lang-btn {
   transition: transform 0.15s;
 }
 .lang-btn:hover { transform: scale(1.05); background: #fff; }
+.sound-btn { padding: 6px 10px; margin-right: 6px; min-width: 40px; }
+.sound-btn.muted { opacity: 0.55; }
+.topbar { gap: 6px; }
+.topbar > .logo { flex: 1; min-width: 0; }
+.topbar > .lang-btn, .topbar > .sound-btn { flex-shrink: 0; }
 
 /* ===== Screens ===== */
 #screens { flex: 1; position: relative; padding: 20px 0; }
@@ -99,25 +137,33 @@ button, .dish-card, .target, .tap-zone, .drag-item, .lang-btn {
 .title-card {
   background: var(--thai-cream);
   border-radius: var(--radius);
-  padding: 32px 28px;
+  padding: 28px 24px 32px;
   text-align: center;
   box-shadow: var(--shadow-lg);
   max-width: 420px;
   width: 100%;
-  border: 4px solid var(--thai-gold);
+  border: 4px solid var(--brand-gold);
 }
 .chef-avatar {
   font-size: 5rem;
   animation: bounce 2s infinite;
+}
+.brand-logo {
+  width: 200px;
+  height: auto;
+  display: block;
+  margin: 0 auto 8px;
+  animation: bounce 2.5s infinite;
 }
 @keyframes bounce {
   0%, 100% { transform: translateY(0); }
   50%      { transform: translateY(-8px); }
 }
 .title-card h1 {
-  font-size: 1.8rem;
-  margin: 8px 0;
-  color: var(--thai-red);
+  font-size: 1.6rem;
+  margin: 4px 0 6px;
+  color: var(--brand-green);
+  letter-spacing: 1px;
 }
 .subtitle {
   font-size: 1rem;
@@ -716,11 +762,15 @@ button, .dish-card, .target, .tap-zone, .drag-item, .lang-btn {
   .logo-emoji { font-size: 1.3rem; }
   .lang-btn { padding: 5px 10px; font-size: 0.85rem; }
 
-  .title-card { padding: 24px 18px; }
-  .title-card h1 { font-size: 1.3rem; }
+  .title-card { padding: 22px 16px 26px; }
+  .title-card h1 { font-size: 1.25rem; }
   .subtitle { font-size: 0.9rem; }
   .chef-avatar { font-size: 4rem; }
+  .brand-logo { width: 160px; }
   .deco { font-size: 1.8rem; }
+  .brand-zh { font-size: 0.95rem; }
+  .brand-en { font-size: 0.6rem; }
+  .logo-mark { width: 32px; height: 32px; font-size: 1.1rem; }
 
   .stage { min-height: 340px; border-width: 3px; }
   .tap-emoji { font-size: 4.2rem; }

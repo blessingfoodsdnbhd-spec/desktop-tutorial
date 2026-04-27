@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 220" width="200" height="220">
+  <defs>
+    <radialGradient id="circleGrad" cx="50%" cy="40%">
+      <stop offset="0%"  stop-color="#2e7e2e"/>
+      <stop offset="100%" stop-color="#0f4f0f"/>
+    </radialGradient>
+  </defs>
+  <circle cx="100" cy="80" r="68" fill="url(#circleGrad)" stroke="#0a3a0a" stroke-width="3"/>
+  <text x="100" y="118" font-size="92" text-anchor="middle"
+        font-family="Apple Color Emoji,Segoe UI Emoji,Noto Color Emoji,sans-serif">🐘</text>
+  <text x="100" y="180" font-size="34" text-anchor="middle" font-weight="bold"
+        font-family="Microsoft JhengHei,PingFang TC,sans-serif" fill="#1a1a1a">泰有福</text>
+  <text x="100" y="206" font-size="14" text-anchor="middle" letter-spacing="2"
+        font-family="Trebuchet MS,sans-serif" fill="#1a1a1a">THAI BLESSING FOOD</text>
+</svg>

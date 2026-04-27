@@ -6,8 +6,8 @@
 // ---------- i18n ----------
 const I18N = {
   en: {
-    title: "Chef Mali's Thai Kitchen",
-    subtitle: "Cook 4 classic Thai dishes!",
+    title: "Thai Cooking Game",
+    subtitle: "Cook 4 classic Thai dishes with us!",
     start: "Start Cooking",
     hint: "Tip: Use mouse / tap. Have fun!",
     pick_dish: "Pick a Dish",
@@ -17,7 +17,7 @@ const I18N = {
     final_score: "Final Score",
     play_again: "Play Again",
     other_dish: "Try Another Dish",
-    footer: "Made with 🌶️ — an original Thai cooking mini-game",
+    footer: "© 泰有福 Thai Blessing Food · Cooking Game",
 
     // Quotes by stars
     quote_3: "Aroi mak mak! Absolutely delicious! ⭐",
@@ -50,8 +50,8 @@ const I18N = {
     wrong: "Wrong!"
   },
   zh: {
-    title: "瑪莉廚師的泰國廚房",
-    subtitle: "來煮 4 道經典泰國菜！",
+    title: "泰式料理小遊戲",
+    subtitle: "和泰有福一起煮 4 道經典泰國菜！",
     start: "開始下廚",
     hint: "提示：用滑鼠或觸控操作，玩得開心！",
     pick_dish: "選一道菜",
@@ -61,7 +61,7 @@ const I18N = {
     final_score: "最終分數",
     play_again: "再玩一次",
     other_dish: "換一道菜",
-    footer: "用 🌶️ 做的 — 原創泰式料理小遊戲",
+    footer: "© 泰有福 Thai Blessing Food · 料理小遊戲",
 
     quote_3: "阿羅伊馬！超級美味！⭐",
     quote_2: "還不錯～繼續加油！",
@@ -342,12 +342,13 @@ function miniChop(step) {
       if (el.classList.contains("popped")) return;
       el.classList.add("popped");
       hit++;
+      Sound.chop();
       const gain = Math.round(100 / total);
       setScore(STATE.currentScore + gain);
       const r = stage.getBoundingClientRect();
       flash("+" + gain, e.clientX - r.left, e.clientY - r.top);
       if (hit >= total) {
-        // bonus for finishing fast
+        Sound.ding();
         setTimeout(finishStep, 300);
       }
     });
@@ -375,6 +376,7 @@ function miniTap(step) {
 
   const onTap = (e) => {
     taps++;
+    Sound.tap();
     const pct = clamp((taps / step.target) * 100, 0, 100);
     fill.style.width = pct + "%";
     setScore(Math.round(pct));
@@ -385,6 +387,7 @@ function miniTap(step) {
       flash("+1", (e.clientX || 0) - r.left, (e.clientY || 0) - r.top);
     }
     if (taps >= step.target) {
+      Sound.ding();
       setTimeout(finishStep, 300);
     }
   };
@@ -440,6 +443,7 @@ function miniTiming(step) {
       score = 20;  label = t("miss");
     }
     setScore(score);
+    if (score >= 70) Sound.good(); else Sound.bad();
     const r = stage.getBoundingClientRect();
     flash(label + " +" + score, r.width / 2, r.height / 2, score < 50);
     setTimeout(finishStep, 700);
@@ -548,6 +552,7 @@ function miniDrag(step) {
           if (isCorrect && !el.classList.contains("placed")) {
             el.classList.add("placed");
             placed++;
+            Sound.good();
             const placedEl = document.createElement("span");
             placedEl.className = "placed-emoji";
             placedEl.textContent = emoji;
@@ -556,8 +561,12 @@ function miniDrag(step) {
             const gain = Math.round(100 / totalCorrect);
             setScore(STATE.currentScore + gain);
             flash("+" + gain, p.clientX - r.left, p.clientY - r.top);
-            if (placed >= totalCorrect) setTimeout(finishStep, 400);
+            if (placed >= totalCorrect) {
+              Sound.ding();
+              setTimeout(finishStep, 400);
+            }
           } else if (!isCorrect) {
+            Sound.bad();
             el.classList.add("shake");
             setTimeout(() => el.classList.remove("shake"), 450);
             if (!el.classList.contains("tried-wrong")) {
@@ -609,6 +618,10 @@ function showResult() {
   $("#result-score-num").textContent = total;
   $("#result-quote").textContent     = t("quote_" + stars);
 
+  if (stars >= 2) Sound.win();
+  else if (stars === 1) Sound.ding();
+  else Sound.bad();
+
   showScreen("result");
 }
 
@@ -617,6 +630,10 @@ function bindEvents() {
   document.body.addEventListener("click", (e) => {
     const action = e.target.closest("[data-action]")?.dataset.action;
     if (!action) return;
+    Sound.init();
+    Sound.resume();
+    Sound.tap();
+    if (Sound.musicOn && !Sound.musicTimer) Sound.startMusic();
     if (action === "goto-menu")  { renderMenu(); showScreen("menu"); }
     if (action === "goto-title") { showScreen("title"); }
     if (action === "play-again") { startDish(STATE.dishIndex); }
@@ -638,6 +655,26 @@ function bindEvents() {
       $("#result-dish-name").textContent = dish.name[STATE.lang];
     }
   });
+
+  const soundBtn = $("#sound-toggle");
+  const setBtnState = (muted) => {
+    soundBtn.textContent = muted ? "🔇" : "🔊";
+    soundBtn.classList.toggle("muted", muted);
+  };
+  soundBtn.addEventListener("click", () => {
+    Sound.init();
+    Sound.resume();
+    const newMuted = Sound.musicOn; // currently on → going to mute
+    Sound.setMuted(newMuted);
+    setBtnState(newMuted);
+  });
+  // Apply saved preference
+  const savedMuted = Sound.loadPref();
+  if (savedMuted) {
+    Sound.musicOn = false;
+    Sound.sfxOn   = false;
+  }
+  setBtnState(savedMuted);
 }
 
 // ---------- Boot ----------

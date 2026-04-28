@@ -1,33 +1,116 @@
-# Atelier Noir — Interior Design Studio
+# Keith Tan Studio — Website
 
-A premium, fully responsive multi-page website for a luxury interior design
-studio. Built as static HTML/CSS/JS, with no build step or framework.
+A static, premium interior design website. **All editable content lives in one
+file: `content.js`.** Edit that one file and every page updates.
 
-## Pages
+---
 
-- `index.html` — Homepage (hero, intro, featured projects, services preview, CTA)
-- `portfolio.html` — Filterable portfolio grid (Residential / Commercial / Hospitality)
-- `project.html` — Project detail page (gallery, before/after, narrative)
-- `about.html` — Company story, brand values, team
-- `services.html` — Detailed services + design process
-- `contact.html` — Contact form, business info, Google Map
+## How to edit your website
 
-## Design
+There is **one file you need to know**: [`content.js`](./content.js).
 
-- Typography: Cormorant Garamond (display) + Inter (body), via Google Fonts
-- Palette: white / warm cream / charcoal-black / accent neutral
-- Spacious layout, scroll-triggered fade-in animations
-- Sticky transparent → solid header
-- Floating WhatsApp button on every page
-- Mobile-first responsive (hamburger nav under 768px)
+Open it on GitHub:
+1. Go to https://github.com/blessingfoodsdnbhd-spec/desktop-tutorial
+2. Click **`content.js`**
+3. Click the pencil icon (✏️ Edit) at the top right
+4. Make your changes
+5. Scroll down → click **Commit changes** → **Commit changes**
+6. Wait 1–2 minutes for GitHub Pages to rebuild
+7. Refresh your website (`Ctrl + Shift + R` to bypass cache)
 
-## Editing content
+Anything inside `content.js` is what shows on the website.
 
-Each page is plain HTML, organised in clearly commented sections. To swap
-photography, change the `background-image: url('…')` references on
-`.project-card__media`, `.intro__media`, `.hero__media`, `.team__member-photo`,
-`.service-row__media`, etc. To wire up a CMS, the section structure maps
-cleanly to typical content models (project, team-member, service).
+---
+
+## Common edits
+
+### Change studio name, phone, email
+Open `content.js`, find the `studio:` block at the top:
+
+```js
+studio: {
+  name:           "Keith Tan Studio",
+  email:          "keithtan@gmail.com",
+  phoneDisplay:   "+60 10 464 6983",
+  phoneRaw:       "60104646983",   // digits only, used for tel: + WhatsApp
+  ...
+}
+```
+Just edit the text between the `"…"` quotes. Keep the quotes and commas.
+
+### Add a new project
+Find the `projects:` array. Each project is one `{ … }` block.
+Copy any block, paste it above or below, and edit:
+
+```js
+{
+  id:           "my-new-project",          // url slug, no spaces
+  name:         "The Lim Family Home",
+  type:         "residential",             // residential | commercial | hospitality
+  location:     "Bangsar, KL",
+  year:         2025,
+  area:         "320 m²",
+  scope:        "Renovation, FF&E",
+  photographer: "Adrian Wong",
+  coverImage:   "https://YOUR-IMAGE-URL.jpg",
+  shortDesc:    "One-line description.",
+  longDesc: [
+    "First paragraph.",
+    "Second paragraph."
+  ],
+  gallery: [
+    "https://image1.jpg",
+    "https://image2.jpg"
+  ],
+  featured: true                          // true = appears on homepage
+},
+```
+
+### Replace an image
+Find the image URL in `content.js` and replace it. Image URLs must:
+- start with `https://`
+- end in `.jpg`, `.jpeg`, `.png`, or `.webp`
+
+Easiest hosting: upload your photo to Imgur, Cloudinary, or directly to this
+GitHub repo, then copy the link.
+
+### Edit a team member, service, or value
+Same pattern — find the block (in `team:`, `services:`, `values:`), edit the
+text, save.
+
+### Remove an item
+Delete the whole `{ … }` block including its trailing comma.
+
+---
+
+## Three rules to avoid breaking the site
+
+1. **Keep the punctuation** — every `:`, `"`, `,`, `{`, `}`, `[`, `]` matters.
+2. **Text goes in double quotes** — `"like this"` not `'like this'`.
+3. **Use straight quotes** `"` not curly quotes `“ ”`. If you copy text from
+   Word or Pages, retype the quotes.
+
+If a page goes blank: open the browser console (right-click → Inspect →
+Console) — it will tell you which line in `content.js` has the problem.
+
+---
+
+## Files
+
+| File | What it is | Edit it? |
+| --- | --- | --- |
+| `content.js` | All editable text + images | ✅ **Yes — your main file** |
+| `index.html` | Homepage skeleton | Only if changing layout |
+| `portfolio.html` | Portfolio skeleton | Only if changing layout |
+| `project.html` | Project detail template | Only if changing layout |
+| `about.html` | About skeleton | Only if changing layout |
+| `services.html` | Services skeleton | Only if changing layout |
+| `contact.html` | Contact + map + form | Only if changing layout |
+| `styles.css` | Visual design (colours, fonts) | Only if changing styling |
+| `render.js` | Auto-fills pages from `content.js` | Don't touch |
+| `script.js` | Nav menu, scroll animations, form | Don't touch |
+
+---
 
 ## Local preview
 
@@ -35,3 +118,7 @@ cleanly to typical content models (project, team-member, service).
 python3 -m http.server 8000
 # then open http://localhost:8000
 ```
+
+## Live site
+
+https://blessingfoodsdnbhd-spec.github.io/desktop-tutorial/

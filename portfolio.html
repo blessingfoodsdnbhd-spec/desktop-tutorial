@@ -7,14 +7,11 @@
   <title>Portfolio — Keith Tan Studio</title>
   <meta name="description" content="A selection of residential, hospitality, and commercial interiors designed by Keith Tan Studio." />
 
-  <!-- Open Graph / link previews -->
   <meta property="og:type" content="website" />
   <meta property="og:title" content="Portfolio — Keith Tan Studio" />
   <meta property="og:description" content="A selection of residential, hospitality, and commercial interiors." />
   <meta property="og:image" content="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1200&q=80" />
-  <meta property="og:url" content="https://blessingfoodsdnbhd-spec.github.io/desktop-tutorial/portfolio.html" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:image" content="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1200&q=80" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -29,8 +26,8 @@
     <div class="container">
       <nav class="nav" aria-label="Main navigation">
         <a href="index.html" class="nav__brand">
-          KEITH TAN STUDIO
-          <small>Interior Design</small>
+          <span data-studio="name-upper">KEITH TAN STUDIO</span>
+          <small data-studio="subtitle">Interior Design</small>
         </a>
         <ul class="nav__list">
           <li><a href="index.html">Home</a></li>
@@ -46,20 +43,16 @@
     </div>
   </header>
 
-  <!-- ============ PAGE HERO ============ -->
   <section class="page-hero">
     <div class="container">
       <div class="page-hero__inner">
         <span class="eyebrow">Portfolio</span>
         <h1 class="page-hero__title">Selected works.</h1>
-        <p class="page-hero__lead">
-          A curated archive of residential, hospitality, and commercial projects.
-        </p>
+        <p class="page-hero__lead">A curated archive of residential, hospitality, and commercial projects.</p>
       </div>
     </div>
   </section>
 
-  <!-- ============ PORTFOLIO GRID ============ -->
   <section class="section">
     <div class="container">
       <div class="filter-bar reveal" data-filter-bar>
@@ -69,163 +62,11 @@
         <button data-filter="hospitality">Hospitality</button>
       </div>
 
-      <div class="project-grid project-grid--two">
-        <a href="project.html" class="project-card reveal" data-filter-target data-tags="residential">
-          <div class="project-card__media-wrap">
-            <div class="project-card__media" style="aspect-ratio: 4 / 5; background-image: url('https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1800&q=85');"></div>
-            <div class="project-card__overlay">
-              <div>
-                <h3>The Damansara Residence</h3>
-                <div class="project-card__overlay-meta">Residence · KL</div>
-              </div>
-            </div>
-          </div>
-          <div class="project-card__body">
-            <div>
-              <h3 class="project-card__title">The Damansara Residence</h3>
-              <div class="project-card__meta">Residence · KL</div>
-            </div>
-            <span class="project-card__cta">→</span>
-          </div>
-        </a>
-
-        <a href="project.html" class="project-card reveal reveal--delay-1" data-filter-target data-tags="residential">
-          <div class="project-card__media-wrap">
-            <div class="project-card__media" style="aspect-ratio: 4 / 5; background-image: url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1800&q=85');"></div>
-            <div class="project-card__overlay">
-              <div>
-                <h3>Casa Ombra</h3>
-                <div class="project-card__overlay-meta">Villa · Bali</div>
-              </div>
-            </div>
-          </div>
-          <div class="project-card__body">
-            <div>
-              <h3 class="project-card__title">Casa Ombra</h3>
-              <div class="project-card__meta">Villa · Bali</div>
-            </div>
-            <span class="project-card__cta">→</span>
-          </div>
-        </a>
-
-        <a href="project.html" class="project-card reveal" data-filter-target data-tags="hospitality">
-          <div class="project-card__media-wrap">
-            <div class="project-card__media" style="aspect-ratio: 4 / 5; background-image: url('https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1800&q=85');"></div>
-            <div class="project-card__overlay">
-              <div>
-                <h3>The Ashbury</h3>
-                <div class="project-card__overlay-meta">Hotel · Bukit Bintang</div>
-              </div>
-            </div>
-          </div>
-          <div class="project-card__body">
-            <div>
-              <h3 class="project-card__title">The Ashbury</h3>
-              <div class="project-card__meta">Hotel · Bukit Bintang</div>
-            </div>
-            <span class="project-card__cta">→</span>
-          </div>
-        </a>
-
-        <a href="project.html" class="project-card reveal reveal--delay-1" data-filter-target data-tags="residential">
-          <div class="project-card__media-wrap">
-            <div class="project-card__media" style="aspect-ratio: 4 / 5; background-image: url('https://images.unsplash.com/photo-1616594039964-ae9021a400a0?auto=format&fit=crop&w=1800&q=85');"></div>
-            <div class="project-card__overlay">
-              <div>
-                <h3>North Bay Loft</h3>
-                <div class="project-card__overlay-meta">Apartment · Penang</div>
-              </div>
-            </div>
-          </div>
-          <div class="project-card__body">
-            <div>
-              <h3 class="project-card__title">North Bay Loft</h3>
-              <div class="project-card__meta">Apartment · Penang</div>
-            </div>
-            <span class="project-card__cta">→</span>
-          </div>
-        </a>
-
-        <a href="project.html" class="project-card reveal" data-filter-target data-tags="commercial">
-          <div class="project-card__media-wrap">
-            <div class="project-card__media" style="aspect-ratio: 4 / 5; background-image: url('https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1800&q=85');"></div>
-            <div class="project-card__overlay">
-              <div>
-                <h3>Studio Verre</h3>
-                <div class="project-card__overlay-meta">Office · KLCC</div>
-              </div>
-            </div>
-          </div>
-          <div class="project-card__body">
-            <div>
-              <h3 class="project-card__title">Studio Verre</h3>
-              <div class="project-card__meta">Office · KLCC</div>
-            </div>
-            <span class="project-card__cta">→</span>
-          </div>
-        </a>
-
-        <a href="project.html" class="project-card reveal reveal--delay-1" data-filter-target data-tags="residential">
-          <div class="project-card__media-wrap">
-            <div class="project-card__media" style="aspect-ratio: 4 / 5; background-image: url('https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=1800&q=85');"></div>
-            <div class="project-card__overlay">
-              <div>
-                <h3>Villa Serena</h3>
-                <div class="project-card__overlay-meta">Residence · Damansara</div>
-              </div>
-            </div>
-          </div>
-          <div class="project-card__body">
-            <div>
-              <h3 class="project-card__title">Villa Serena</h3>
-              <div class="project-card__meta">Residence · Damansara</div>
-            </div>
-            <span class="project-card__cta">→</span>
-          </div>
-        </a>
-
-        <a href="project.html" class="project-card reveal" data-filter-target data-tags="hospitality">
-          <div class="project-card__media-wrap">
-            <div class="project-card__media" style="aspect-ratio: 4 / 5; background-image: url('https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=1800&q=85');"></div>
-            <div class="project-card__overlay">
-              <div>
-                <h3>Hotel Marais</h3>
-                <div class="project-card__overlay-meta">Boutique Hotel · Melaka</div>
-              </div>
-            </div>
-          </div>
-          <div class="project-card__body">
-            <div>
-              <h3 class="project-card__title">Hotel Marais</h3>
-              <div class="project-card__meta">Boutique Hotel · Melaka</div>
-            </div>
-            <span class="project-card__cta">→</span>
-          </div>
-        </a>
-
-        <a href="project.html" class="project-card reveal reveal--delay-1" data-filter-target data-tags="commercial">
-          <div class="project-card__media-wrap">
-            <div class="project-card__media" style="aspect-ratio: 4 / 5; background-image: url('https://images.unsplash.com/photo-1604578762246-41134e37f9cc?auto=format&fit=crop&w=1800&q=85');"></div>
-            <div class="project-card__overlay">
-              <div>
-                <h3>Wisma Verde</h3>
-                <div class="project-card__overlay-meta">Showroom · Singapore</div>
-              </div>
-            </div>
-          </div>
-          <div class="project-card__body">
-            <div>
-              <h3 class="project-card__title">Wisma Verde</h3>
-              <div class="project-card__meta">Showroom · Singapore</div>
-            </div>
-            <span class="project-card__cta">→</span>
-          </div>
-        </a>
-      </div>
+      <!-- ALL PROJECTS (rendered from SITE.projects in content.js) -->
+      <div class="project-grid project-grid--two" data-render="all-projects"></div>
     </div>
   </section>
 
-  <!-- ============ CTA ============ -->
   <section class="cta">
     <div class="container">
       <div class="reveal">
@@ -243,7 +84,7 @@
     <div class="container">
       <div class="footer-grid">
         <div class="footer-brand">
-          <h3>Keith Tan Studio</h3>
+          <h3 data-studio="name">Keith Tan Studio</h3>
           <p>An interior design studio designing residential and commercial spaces with quiet luxury and timeless craft.</p>
         </div>
         <div class="footer-col">
@@ -258,33 +99,34 @@
         <div class="footer-col">
           <h4 class="footer-col__title">Visit</h4>
           <ul>
-            <li>Kuala Lumpur<br/>Malaysia</li>
-            <li>Mon–Fri · 10:00–18:00</li>
+            <li><span data-studio="location-line1">Kuala Lumpur</span><br/><span data-studio="location-line2">Malaysia</span></li>
+            <li><span data-studio="hours-line1">Mon–Fri</span> · <span data-studio="hours-line2">10:00–18:00</span></li>
           </ul>
         </div>
         <div class="footer-col">
           <h4 class="footer-col__title">Contact</h4>
           <ul>
-            <li><a href="mailto:keithtan@gmail.com">keithtan@gmail.com</a></li>
-            <li><a href="tel:+60104646983">+60 10 464 6983</a></li>
-            <li><a href="https://wa.me/60104646983">WhatsApp</a></li>
+            <li><a data-studio="email" href="mailto:keithtan@gmail.com">keithtan@gmail.com</a></li>
+            <li><a data-studio="phone" href="tel:+60104646983">+60 10 464 6983</a></li>
+            <li><a data-studio="whatsapp-link" href="#">WhatsApp</a></li>
           </ul>
         </div>
       </div>
       <div class="footer-bottom">
-        <span>© <span data-current-year>2026</span> Keith Tan Studio. All rights reserved.</span>
+        <span>© <span data-current-year>2026</span> <span data-studio="name">Keith Tan Studio</span>. All rights reserved.</span>
         <span>Designed in-house</span>
       </div>
     </div>
   </footer>
 
-  <a href="https://wa.me/60104646983?text=Hello%20Keith%20Tan%20Studio%2C%20I%27d%20like%20to%20discuss%20a%20project."
-     class="whatsapp-float" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
+  <a data-studio="whatsapp-link" href="#" class="whatsapp-float" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
     <svg viewBox="0 0 32 32" aria-hidden="true">
       <path d="M19.11 17.43c-.27-.14-1.6-.79-1.85-.88-.25-.09-.43-.14-.61.14-.18.27-.7.88-.86 1.06-.16.18-.32.2-.59.07-.27-.14-1.14-.42-2.17-1.34-.8-.71-1.34-1.59-1.5-1.86-.16-.27-.02-.42.12-.55.12-.12.27-.32.41-.48.14-.16.18-.27.27-.45.09-.18.05-.34-.02-.48-.07-.14-.61-1.47-.84-2.02-.22-.53-.45-.46-.61-.47l-.52-.01c-.18 0-.48.07-.73.34-.25.27-.96.94-.96 2.29 0 1.35.99 2.66 1.13 2.84.14.18 1.95 2.97 4.72 4.16.66.29 1.18.46 1.58.59.66.21 1.27.18 1.74.11.53-.08 1.6-.65 1.83-1.28.23-.63.23-1.17.16-1.28-.07-.11-.25-.18-.52-.32zM16 4C9.37 4 4 9.37 4 16c0 2.06.53 4.04 1.53 5.79L4 28l6.39-1.5A11.94 11.94 0 0 0 16 28c6.63 0 12-5.37 12-12S22.63 4 16 4zm0 21.83c-1.85 0-3.66-.49-5.24-1.42l-.38-.22-3.79.89.9-3.69-.25-.39A9.8 9.8 0 0 1 6.17 16c0-5.42 4.41-9.83 9.83-9.83s9.83 4.41 9.83 9.83-4.41 9.83-9.83 9.83z"/>
     </svg>
   </a>
 
+  <script src="content.js"></script>
+  <script src="render.js"></script>
   <script src="script.js"></script>
 </body>
 </html>

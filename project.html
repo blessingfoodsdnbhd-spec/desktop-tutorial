@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#111111" />
   <title>Maison Lumière — Atelier Noir</title>
-  <meta name="description" content="A full renovation of a 19th-century apartment in the 7th arrondissement of Paris." />
+  <meta name="description" content="A full renovation of a 19th-century apartment in Paris." />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -16,7 +16,7 @@
 </head>
 <body>
 
-  <header class="site-header site-header--solid">
+  <header class="site-header site-header--transparent">
     <div class="container">
       <nav class="nav" aria-label="Main navigation">
         <a href="index.html" class="nav__brand">
@@ -37,19 +37,24 @@
     </div>
   </header>
 
-  <!-- ============ PROJECT HERO ============ -->
-  <div class="project-hero" style="margin-top: 0; background-image: url('https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=2200&q=80');"></div>
+  <!-- ============ FULL-BLEED PROJECT HERO ============ -->
+  <section class="project-hero" style="height: 100vh; min-height: 100svh; background-image: url('https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=2400&q=85');">
+    <div class="container" style="position: absolute; left: 0; right: 0; bottom: 4rem; color: #fff;">
+      <span class="eyebrow" style="color: rgba(255,255,255,0.85);">Project · 2024 · Residence</span>
+      <h1 style="color: #fff; margin: 0.5rem 0 0; font-size: clamp(2.6rem, 6vw, 5rem);">Maison Lumière</h1>
+    </div>
+  </section>
 
   <!-- ============ PROJECT META ============ -->
   <section class="container">
     <div class="project-meta">
       <div class="reveal">
-        <span class="eyebrow">Project · 2024</span>
-        <h1 style="margin-top: 0.5rem;">Maison Lumière</h1>
-        <p class="lead">
-          A full renovation of a 19th-century apartment in the 7th arrondissement
-          of Paris — restoring its original proportions while introducing a
-          quietly contemporary material palette.
+        <span class="eyebrow">Concept</span>
+        <h2 style="font-size: clamp(1.6rem, 3vw, 2.4rem); margin: 0.5rem 0 0;">Light as the principal material.</h2>
+        <p class="lead" style="margin-top: 1.5rem;">
+          A full renovation of a 19th-century apartment — restoring its original
+          proportions while introducing a quietly contemporary palette of
+          limewashed plaster, oak parquet, and travertine.
         </p>
       </div>
       <div class="project-meta__details reveal reveal--delay-1">
@@ -71,7 +76,7 @@
         </div>
         <div>
           <div class="detail__label">Scope</div>
-          <div class="detail__value">Full Renovation, FF&amp;E</div>
+          <div class="detail__value">Renovation, FF&amp;E</div>
         </div>
         <div>
           <div class="detail__label">Photography</div>
@@ -81,84 +86,56 @@
     </div>
   </section>
 
-  <!-- ============ GALLERY ============ -->
-  <section class="container">
-    <div class="gallery gallery--full reveal">
-      <div class="gallery__img" style="background-image: url('https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=2000&q=80'); aspect-ratio: 16 / 9;"></div>
-    </div>
+  <!-- ============ FULL-BLEED IMAGE 1 ============ -->
+  <div class="bleed reveal" style="margin-top: 2rem;">
+    <div class="gallery__img" style="aspect-ratio: 16 / 9; background-image: url('https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=2400&q=85');"></div>
+  </div>
 
+  <!-- ============ TWO-UP ============ -->
+  <section class="container" style="margin-top: clamp(2rem, 5vw, 4rem);">
     <div class="gallery">
-      <div class="gallery__img reveal" style="background-image: url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1400&q=80');"></div>
-      <div class="gallery__img reveal reveal--delay-1" style="background-image: url('https://images.unsplash.com/photo-1616594039964-ae9021a400a0?auto=format&fit=crop&w=1400&q=80');"></div>
+      <div class="gallery__img reveal" style="aspect-ratio: 4 / 5; background-image: url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1600&q=85');"></div>
+      <div class="gallery__img reveal reveal--delay-1" style="aspect-ratio: 4 / 5; background-image: url('https://images.unsplash.com/photo-1616594039964-ae9021a400a0?auto=format&fit=crop&w=1600&q=85');"></div>
     </div>
   </section>
 
-  <!-- ============ NARRATIVE ============ -->
-  <section class="section--tight">
-    <div class="container">
-      <div class="intro">
-        <div class="intro__copy reveal">
-          <span class="eyebrow">Concept</span>
-          <h2>Light as the principal material.</h2>
-          <p class="lead">
-            We approached Maison Lumière as a study in restraint. Every wall, ceiling,
-            and floor was treated as a soft canvas — limewashed plaster, oak parquet,
-            travertine — designed to receive the changing light of the Parisian seasons.
-          </p>
-          <p>
-            The original mouldings, fireplaces, and herringbone floors were
-            painstakingly restored. New interventions were kept few but precise:
-            a sculptural plaster kitchen, bespoke joinery in burnished bronze,
-            and a custom marble bath carved from a single block.
-          </p>
-        </div>
-        <div class="intro__media reveal reveal--delay-1" style="background-image: url('https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1400&q=80');"></div>
-      </div>
-    </div>
-  </section>
+  <!-- ============ FULL-BLEED IMAGE 2 ============ -->
+  <div class="bleed reveal" style="margin-top: clamp(2rem, 5vw, 4rem);">
+    <div class="gallery__img" style="aspect-ratio: 21 / 9; background-image: url('https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=2400&q=85');"></div>
+  </div>
 
   <!-- ============ BEFORE / AFTER ============ -->
-  <section class="section--tight">
+  <section class="section">
     <div class="container">
       <div class="section-header reveal">
         <span class="eyebrow">Transformation</span>
-        <h2 class="section-header__title">Before · After</h2>
+        <h2 class="section-header__title" style="font-size: clamp(1.8rem, 3.4vw, 2.6rem);">Before · After</h2>
       </div>
       <div class="before-after">
         <figure class="reveal">
-          <div class="before-after__img" style="background-image: url('https://images.unsplash.com/photo-1503174971373-b1f69850bded?auto=format&fit=crop&w=1400&q=80');"></div>
+          <div class="before-after__img" style="aspect-ratio: 4 / 5; background-image: url('https://images.unsplash.com/photo-1503174971373-b1f69850bded?auto=format&fit=crop&w=1600&q=85');"></div>
           <figcaption>Before — Living Room</figcaption>
         </figure>
         <figure class="reveal reveal--delay-1">
-          <div class="before-after__img" style="background-image: url('https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1400&q=80');"></div>
+          <div class="before-after__img" style="aspect-ratio: 4 / 5; background-image: url('https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1600&q=85');"></div>
           <figcaption>After — Living Room</figcaption>
-        </figure>
-        <figure class="reveal">
-          <div class="before-after__img" style="background-image: url('https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&w=1400&q=80');"></div>
-          <figcaption>Before — Kitchen</figcaption>
-        </figure>
-        <figure class="reveal reveal--delay-1">
-          <div class="before-after__img" style="background-image: url('https://images.unsplash.com/photo-1556909114-44e3e9399a2e?auto=format&fit=crop&w=1400&q=80');"></div>
-          <figcaption>After — Kitchen</figcaption>
         </figure>
       </div>
     </div>
   </section>
 
-  <!-- ============ FULL-WIDTH IMAGE ============ -->
-  <section class="container">
-    <div class="gallery gallery--full reveal">
-      <div class="gallery__img" style="background-image: url('https://images.unsplash.com/photo-1615874959474-d609969a20ed?auto=format&fit=crop&w=2200&q=80'); aspect-ratio: 21 / 9;"></div>
-    </div>
-  </section>
+  <!-- ============ FULL-BLEED IMAGE 3 ============ -->
+  <div class="bleed reveal">
+    <div class="gallery__img" style="aspect-ratio: 21 / 9; background-image: url('https://images.unsplash.com/photo-1615874959474-d609969a20ed?auto=format&fit=crop&w=2400&q=85');"></div>
+  </div>
 
   <!-- ============ NEXT PROJECT ============ -->
-  <section class="container">
+  <section class="container" style="margin-top: var(--space-xl);">
     <div class="next-project">
-      <a href="portfolio.html" class="link-arrow" style="border-bottom: none; padding: 0;">← Back to Portfolio</a>
+      <a href="portfolio.html" class="link-arrow" style="border-bottom: none; padding: 0;">← All Projects</a>
       <a href="project.html" style="text-align: right;">
         <span class="next-project__label">Next Project</span>
-        <span style="font-family: var(--font-display); font-size: 1.6rem; color: var(--color-ink);">Casa Ombra →</span>
+        <span style="font-family: var(--font-display); font-size: clamp(1.6rem, 2.6vw, 2.2rem); color: var(--color-ink);">Casa Ombra →</span>
       </a>
     </div>
   </section>
@@ -169,7 +146,7 @@
       <div class="footer-grid">
         <div class="footer-brand">
           <h3>Atelier Noir</h3>
-          <p>An interior design studio founded in 2008, designing residential and commercial spaces with quiet luxury and timeless craft.</p>
+          <p>An interior design studio designing residential and commercial spaces with quiet luxury and timeless craft.</p>
         </div>
         <div class="footer-col">
           <h4 class="footer-col__title">Studio</h4>
@@ -183,7 +160,7 @@
         <div class="footer-col">
           <h4 class="footer-col__title">Visit</h4>
           <ul>
-            <li>21 Rue du Faubourg<br/>75008 Paris, France</li>
+            <li>Kuala Lumpur · Malaysia</li>
             <li>Mon–Fri · 10:00–18:00</li>
           </ul>
         </div>
@@ -198,7 +175,7 @@
       </div>
       <div class="footer-bottom">
         <span>© <span data-current-year>2026</span> Atelier Noir. All rights reserved.</span>
-        <span>Designed in-house · Paris</span>
+        <span>Designed in-house</span>
       </div>
     </div>
   </footer>

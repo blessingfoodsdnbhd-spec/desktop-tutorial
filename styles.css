@@ -328,9 +328,10 @@ p { margin: 0 0 1rem; color: var(--color-text); }
 .hero {
   position: relative;
   min-height: 100vh;
+  min-height: 100svh;
   display: flex;
   align-items: flex-end;
-  padding: 0 0 var(--space-xl);
+  padding: 6rem 0 var(--space-xl);
   color: #fff;
   overflow: hidden;
 }
@@ -338,8 +339,10 @@ p { margin: 0 0 1rem; color: var(--color-text); }
 .hero__media {
   position: absolute;
   inset: 0;
+  background-color: #2a2a2a;
   background-size: cover;
   background-position: center;
+  background-repeat: no-repeat;
   z-index: -2;
   transform: scale(1.05);
   animation: heroZoom 12s var(--ease) forwards;
@@ -438,8 +441,10 @@ p { margin: 0 0 1rem; color: var(--color-text); }
 
 .intro__media {
   aspect-ratio: 4 / 5;
+  background-color: var(--color-warm-grey);
   background-size: cover;
   background-position: center;
+  background-repeat: no-repeat;
 }
 
 .intro__copy { max-width: 500px; }
@@ -497,8 +502,10 @@ p { margin: 0 0 1rem; color: var(--color-text); }
 
 .project-card__media {
   aspect-ratio: 4 / 5;
+  background-color: var(--color-warm-grey);
   background-size: cover;
   background-position: center;
+  background-repeat: no-repeat;
   transition: transform 1.2s var(--ease);
   filter: saturate(0.95);
 }
@@ -649,8 +656,10 @@ p { margin: 0 0 1rem; color: var(--color-text); }
 
 .service-row__media {
   aspect-ratio: 5 / 4;
+  background-color: var(--color-warm-grey);
   background-size: cover;
   background-position: center;
+  background-repeat: no-repeat;
 }
 
 .service-row__num {
@@ -727,8 +736,10 @@ p { margin: 0 0 1rem; color: var(--color-text); }
 
 .team__member-photo {
   aspect-ratio: 4 / 5;
+  background-color: var(--color-warm-grey);
   background-size: cover;
   background-position: center;
+  background-repeat: no-repeat;
   filter: grayscale(0.15);
 }
 
@@ -749,8 +760,10 @@ p { margin: 0 0 1rem; color: var(--color-text); }
 /* ---------- Project Detail ---------- */
 .project-hero {
   height: 88vh;
+  background-color: var(--color-warm-grey);
   background-size: cover;
   background-position: center;
+  background-repeat: no-repeat;
   position: relative;
 }
 
@@ -800,8 +813,10 @@ p { margin: 0 0 1rem; color: var(--color-text); }
 
 .gallery__img {
   aspect-ratio: 4 / 3;
+  background-color: var(--color-warm-grey);
   background-size: cover;
   background-position: center;
+  background-repeat: no-repeat;
 }
 
 .gallery__img--tall { aspect-ratio: 3 / 4; }
@@ -825,8 +840,10 @@ p { margin: 0 0 1rem; color: var(--color-text); }
 
 .before-after__img {
   aspect-ratio: 4 / 3;
+  background-color: var(--color-warm-grey);
   background-size: cover;
   background-position: center;
+  background-repeat: no-repeat;
 }
 
 .next-project {

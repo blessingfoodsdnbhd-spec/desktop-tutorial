@@ -4,15 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#111111" />
-  <title>Atelier Noir — Designing Spaces That Inspire</title>
-  <meta name="description" content="Atelier Noir is a luxury interior design studio crafting timeless residential and commercial spaces. Designing spaces that inspire." />
+  <title>Portfolio — Atelier Noir</title>
+  <meta name="description" content="A selection of residential, hospitality, and commercial interiors designed by Atelier Noir." />
 
-  <!-- Open Graph -->
-  <meta property="og:type" content="website" />
-  <meta property="og:title" content="Atelier Noir — Interior Design Studio" />
-  <meta property="og:description" content="A luxury interior design studio crafting timeless residential and commercial spaces." />
-
-  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
@@ -22,8 +16,7 @@
 </head>
 <body>
 
-  <!-- ============ HEADER ============ -->
-  <header class="site-header site-header--transparent">
+  <header class="site-header site-header--solid">
     <div class="container">
       <nav class="nav" aria-label="Main navigation">
         <a href="index.html" class="nav__brand">
@@ -31,8 +24,8 @@
           <small>Interior Design Studio</small>
         </a>
         <ul class="nav__list">
-          <li><a href="index.html" class="is-active">Home</a></li>
-          <li><a href="portfolio.html">Portfolio</a></li>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="portfolio.html" class="is-active">Portfolio</a></li>
           <li><a href="services.html">Services</a></li>
           <li><a href="about.html">About</a></li>
           <li><a href="contact.html">Contact</a></li>
@@ -44,72 +37,32 @@
     </div>
   </header>
 
-  <!-- ============ HERO ============ -->
-  <section class="hero">
-    <div class="hero__media" style="background-image: url('https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=2000&q=80');"></div>
+  <!-- ============ PAGE HERO ============ -->
+  <section class="page-hero">
     <div class="container">
-      <div class="hero__content">
-        <span class="eyebrow hero__eyebrow">Atelier Noir · Est. 2008</span>
-        <h1 class="hero__title">Designing Spaces<br/>That <em>Inspire</em></h1>
-        <p class="hero__lead">
-          A multidisciplinary studio crafting refined residential and commercial
-          interiors — where architecture, light, and materiality converge.
+      <div class="page-hero__inner">
+        <span class="eyebrow">Portfolio</span>
+        <h1 class="page-hero__title">Selected works, 2008 — present.</h1>
+        <p class="page-hero__lead">
+          A curated archive of residential, hospitality, and commercial projects
+          across Europe, North America, and Asia.
         </p>
-        <div class="btn-row">
-          <a href="portfolio.html" class="btn btn--light">View Portfolio</a>
-          <a href="contact.html" class="btn btn--light">Contact Us</a>
-        </div>
       </div>
     </div>
-    <div class="hero__scroll">Scroll</div>
   </section>
 
-  <!-- ============ INTRO ============ -->
+  <!-- ============ PORTFOLIO GRID ============ -->
   <section class="section">
     <div class="container">
-      <div class="intro">
-        <div class="intro__media reveal" style="background-image: url('https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=1400&q=80');"></div>
-        <div class="intro__copy reveal reveal--delay-1">
-          <span class="eyebrow">The Studio</span>
-          <h2>A quiet pursuit of elegance, restraint, and craft.</h2>
-          <p class="lead">
-            Atelier Noir is an interior design studio founded on the belief that great
-            spaces are composed in silence — through proportion, light, and considered
-            material choices.
-          </p>
-          <p>
-            From private residences to boutique hospitality, our work is grounded
-            in collaboration with architects, artisans, and clients who value the
-            beauty of doing fewer things, exceptionally well.
-          </p>
-          <div class="signature">— Elena Marchetti, Founder</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ STATS ============ -->
-  <section class="section--tight">
-    <div class="container">
-      <div class="stats reveal">
-        <div class="stat"><div class="stat__num">160+</div><div class="stat__label">Projects Delivered</div></div>
-        <div class="stat"><div class="stat__num">17</div><div class="stat__label">Years of Practice</div></div>
-        <div class="stat"><div class="stat__num">22</div><div class="stat__label">Cities Worldwide</div></div>
-        <div class="stat"><div class="stat__num">38</div><div class="stat__label">Industry Awards</div></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ FEATURED PROJECTS ============ -->
-  <section class="section section--cream">
-    <div class="container">
-      <div class="section-header reveal">
-        <span class="eyebrow">Selected Work</span>
-        <h2 class="section-header__title">Featured projects from across the studio.</h2>
+      <div class="filter-bar reveal" data-filter-bar>
+        <button data-filter="all" class="is-active">All Projects</button>
+        <button data-filter="residential">Residential</button>
+        <button data-filter="commercial">Commercial</button>
+        <button data-filter="hospitality">Hospitality</button>
       </div>
 
-      <div class="project-grid">
-        <a href="project.html" class="project-card reveal">
+      <div class="project-grid project-grid--three">
+        <a href="project.html" class="project-card reveal" data-filter-target data-tags="residential">
           <div class="project-card__media" style="background-image: url('https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1400&q=80');"></div>
           <div class="project-card__body">
             <div>
@@ -120,7 +73,7 @@
           </div>
         </a>
 
-        <a href="project.html" class="project-card reveal reveal--delay-1">
+        <a href="project.html" class="project-card reveal reveal--delay-1" data-filter-target data-tags="residential">
           <div class="project-card__media" style="background-image: url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1400&q=80');"></div>
           <div class="project-card__body">
             <div>
@@ -131,7 +84,7 @@
           </div>
         </a>
 
-        <a href="project.html" class="project-card reveal">
+        <a href="project.html" class="project-card reveal reveal--delay-2" data-filter-target data-tags="hospitality">
           <div class="project-card__media" style="background-image: url('https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1400&q=80');"></div>
           <div class="project-card__body">
             <div>
@@ -142,7 +95,7 @@
           </div>
         </a>
 
-        <a href="project.html" class="project-card reveal reveal--delay-1">
+        <a href="project.html" class="project-card reveal" data-filter-target data-tags="residential">
           <div class="project-card__media" style="background-image: url('https://images.unsplash.com/photo-1616594039964-ae9021a400a0?auto=format&fit=crop&w=1400&q=80');"></div>
           <div class="project-card__body">
             <div>
@@ -152,47 +105,61 @@
             <span class="project-card__cta">→</span>
           </div>
         </a>
-      </div>
 
-      <div style="margin-top: 3.5rem; text-align: center;" class="reveal">
-        <a href="portfolio.html" class="link-arrow">Explore the Portfolio</a>
-      </div>
-    </div>
-  </section>
+        <a href="project.html" class="project-card reveal reveal--delay-1" data-filter-target data-tags="commercial">
+          <div class="project-card__media" style="background-image: url('https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1400&q=80');"></div>
+          <div class="project-card__body">
+            <div>
+              <h3 class="project-card__title">Studio Verre</h3>
+              <div class="project-card__meta">Office · Milan</div>
+            </div>
+            <span class="project-card__cta">→</span>
+          </div>
+        </a>
 
-  <!-- ============ SERVICES PREVIEW ============ -->
-  <section class="section">
-    <div class="container">
-      <div class="section-header reveal">
-        <span class="eyebrow">Services</span>
-        <h2 class="section-header__title">From the first sketch to the final styling.</h2>
-      </div>
+        <a href="project.html" class="project-card reveal reveal--delay-2" data-filter-target data-tags="residential">
+          <div class="project-card__media" style="background-image: url('https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=1400&q=80');"></div>
+          <div class="project-card__body">
+            <div>
+              <h3 class="project-card__title">Villa Serena</h3>
+              <div class="project-card__meta">Residence · Provence</div>
+            </div>
+            <span class="project-card__cta">→</span>
+          </div>
+        </a>
 
-      <div class="services-grid reveal">
-        <article class="service-card">
-          <span class="service-card__num">01</span>
-          <h3 class="service-card__title">Interior Design</h3>
-          <p class="service-card__desc">Full-service residential and commercial interiors — concept, FF&amp;E, lighting, and bespoke detailing.</p>
-        </article>
-        <article class="service-card">
-          <span class="service-card__num">02</span>
-          <h3 class="service-card__title">Renovation</h3>
-          <p class="service-card__desc">Architectural renovation and refurbishment, from heritage homes to contemporary refits.</p>
-        </article>
-        <article class="service-card">
-          <span class="service-card__num">03</span>
-          <h3 class="service-card__title">Consultation</h3>
-          <p class="service-card__desc">Targeted consultation packages — colour, materials, layout, or sourcing — tailored to your project.</p>
-        </article>
-        <article class="service-card">
-          <span class="service-card__num">04</span>
-          <h3 class="service-card__title">Custom Solutions</h3>
-          <p class="service-card__desc">Bespoke joinery, custom furniture, and signature finishes designed exclusively for your space.</p>
-        </article>
-      </div>
+        <a href="project.html" class="project-card reveal" data-filter-target data-tags="hospitality">
+          <div class="project-card__media" style="background-image: url('https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=1400&q=80');"></div>
+          <div class="project-card__body">
+            <div>
+              <h3 class="project-card__title">Hotel Marais</h3>
+              <div class="project-card__meta">Boutique Hotel · Paris</div>
+            </div>
+            <span class="project-card__cta">→</span>
+          </div>
+        </a>
 
-      <div style="margin-top: 3.5rem;" class="reveal">
-        <a href="services.html" class="link-arrow">All Services</a>
+        <a href="project.html" class="project-card reveal reveal--delay-1" data-filter-target data-tags="commercial">
+          <div class="project-card__media" style="background-image: url('https://images.unsplash.com/photo-1604578762246-41134e37f9cc?auto=format&fit=crop&w=1400&q=80');"></div>
+          <div class="project-card__body">
+            <div>
+              <h3 class="project-card__title">Atelier Florent</h3>
+              <div class="project-card__meta">Showroom · Antwerp</div>
+            </div>
+            <span class="project-card__cta">→</span>
+          </div>
+        </a>
+
+        <a href="project.html" class="project-card reveal reveal--delay-2" data-filter-target data-tags="residential">
+          <div class="project-card__media" style="background-image: url('https://images.unsplash.com/photo-1615874959474-d609969a20ed?auto=format&fit=crop&w=1400&q=80');"></div>
+          <div class="project-card__body">
+            <div>
+              <h3 class="project-card__title">The Hillside House</h3>
+              <div class="project-card__meta">Residence · Los Angeles</div>
+            </div>
+            <span class="project-card__cta">→</span>
+          </div>
+        </a>
       </div>
     </div>
   </section>
@@ -201,12 +168,11 @@
   <section class="cta">
     <div class="container">
       <div class="reveal">
-        <span class="eyebrow" style="color: rgba(255,255,255,0.6);">Begin a Project</span>
-        <h2>Let's design a space that<br/><em style="font-style: italic;">feels</em> like home.</h2>
-        <p>We accept a small number of new commissions each year. Tell us about your space, your vision, and your timeline.</p>
+        <span class="eyebrow" style="color: rgba(255,255,255,0.6);">In Confidence</span>
+        <h2>Selected works, by request.</h2>
+        <p>Our hospitality and private commissions are not always public. We're happy to share additional case studies on request.</p>
         <div class="btn-row" style="justify-content: center;">
-          <a href="contact.html" class="btn btn--light">Start a Project</a>
-          <a href="portfolio.html" class="btn btn--light">See Our Work</a>
+          <a href="contact.html" class="btn btn--light">Request Case Studies</a>
         </div>
       </div>
     </div>
@@ -252,7 +218,6 @@
     </div>
   </footer>
 
-  <!-- ============ WHATSAPP FLOAT ============ -->
   <a href="https://wa.me/33645000000?text=Hello%20Atelier%20Noir%2C%20I%27d%20like%20to%20discuss%20a%20project."
      class="whatsapp-float" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
     <svg viewBox="0 0 32 32" aria-hidden="true">

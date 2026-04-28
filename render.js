@@ -17,7 +17,9 @@
   /* ---------- Helpers ---------- */
   const $  = (sel, ctx = document) => ctx.querySelector(sel);
   const $$ = (sel, ctx = document) => Array.from(ctx.querySelectorAll(sel));
-  const html = (tpl) => tpl;        // identity for readability
+  // Tagged template helper: glues strings + interpolated values into one string.
+  const html = (strings, ...values) =>
+    strings.reduce((acc, s, i) => acc + s + (values[i] != null ? values[i] : ""), "");
   const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({
     "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
   }[c]));

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Blessing Food 有口福 · Rawang | Halal 手工餅乾</title>
+<meta name="description" content="Blessing Food 有口福 — Rawang 的 Halal 手工餅乾。歡迎到店選購、WhatsApp 下單。" />
+<meta name="theme-color" content="#3a2415" />
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:"Segoe UI","Microsoft JhengHei","PingFang TC","Noto Sans CJK TC",Arial,sans-serif;
+    background:linear-gradient(170deg,#fbf8f1 0%,#f1e6d2 100%);
+    color:#3a2415;min-height:100vh;padding:28px 16px 40px;
+  }
+  .wrap{max-width:460px;margin:0 auto}
+  .logo{
+    width:96px;height:96px;border-radius:50%;margin:0 auto 14px;
+    background:#fff;border:3px solid #e0a730;display:flex;align-items:center;
+    justify-content:center;font-size:34px;font-weight:800;color:#9a6b3f;
+    box-shadow:0 8px 22px rgba(58,36,21,.15)
+  }
+  h1{text-align:center;font-size:27px;line-height:1.2}
+  h1 small{display:block;font-size:15px;letter-spacing:.25em;color:#9a6b3f;font-weight:600;text-transform:uppercase;margin-top:6px}
+  .tagline{text-align:center;color:#7a5a3c;margin:10px 0 14px;font-size:14px}
+  .chips{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:26px}
+  .chip{font-size:12.5px;font-weight:700;padding:5px 13px;border-radius:999px}
+  .chip.halal{color:#1f7a4d;border:2px solid #1f7a4d}
+  .chip.loc{color:#9a6b3f;border:2px solid #e6cfa6;background:#fff}
+  a.btn,div.btn{
+    display:flex;align-items:center;gap:13px;width:100%;
+    background:#fff;border:1.5px solid #ecdcc2;border-radius:16px;
+    padding:15px 18px;margin-bottom:13px;text-decoration:none;color:#3a2415;
+    font-size:16px;font-weight:600;box-shadow:0 4px 14px rgba(58,36,21,.06);
+    transition:transform .08s ease
+  }
+  a.btn:active{transform:scale(.98)}
+  .btn .ico{font-size:22px;width:26px;text-align:center}
+  .btn .sub{display:block;font-size:12px;font-weight:500;color:#9a6b3f;margin-top:1px}
+  .btn.primary{background:#3a2415;color:#fff;border-color:#3a2415}
+  .btn.primary .sub{color:#e6cfa6}
+  .btn.todo{opacity:.5;border-style:dashed;cursor:default}
+  .hours{background:#fff;border:1.5px solid #ecdcc2;border-radius:16px;padding:16px 18px;margin:6px 0 18px}
+  .hours h2{font-size:15px;color:#9a6b3f;margin-bottom:10px}
+  .hours .row{display:flex;justify-content:space-between;font-size:14px;padding:4px 0;color:#5a3d24}
+  footer{text-align:center;color:#a08868;font-size:12px;margin-top:18px}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+
+<script>
+/* ===================== 改這裡 / EDIT HERE =====================
+   把 ⬇️ 的資料換成你的真實資料。含 "XXX" 或留空的會顯示成「待提供」灰色按鈕。
+   WhatsApp / 電話 格式:國碼+號碼,不要 + 和空格。馬來西亞例子:60123456789
+*/
+const SHOP = {
+  nameZh:   "有口福",
+  nameEn:   "Blessing Food",
+  tagline:  "手工烘焙 · 香脆餅乾 · 100% Halal",
+  area:     "Rawang, Selangor",
+  maps:     "https://maps.app.goo.gl/HkKYbSLMBVtVm8NHA",   // ✅ 已有
+  review:   "https://maps.app.goo.gl/HkKYbSLMBVtVm8NHA",   // 之後可換成「直達 5 星」連結
+  whatsapp: "60XXXXXXXXX",          // ⬅️ 請提供 WhatsApp 號碼
+  phone:    "60XXXXXXXXX",          // ⬅️ 請提供 電話
+  facebook: "https://facebook.com/XXXX",     // ⬅️ 請提供 FB 連結
+  instagram:"https://instagram.com/XXXX",    // ⬅️ 請提供 IG 連結
+  hours: [                          // ⬅️ 請提供 營業時間(填了才會顯示)
+    ["週一 – 週五", "XX:XX – XX:XX"],
+    ["週六 – 週日", "XX:XX – XX:XX"],
+  ],
+};
+/* ============================================================== */
+
+const real = v => v && !/X{2,}/.test(v) && !/\/XXXX$/.test(v);
+const waMsg = encodeURIComponent("你好 Blessing Food 有口福,我想訂餅乾 🍪");
+
+const buttons = [
+  { ico:"📍", label:"來店裡 · 導航", sub:"Get directions on Google Maps", href:SHOP.maps, primary:true, key:"maps" },
+  { ico:"💬", label:"WhatsApp 下單", sub:"Order / enquire on WhatsApp", href:real(SHOP.whatsapp)?`https://wa.me/${SHOP.whatsapp}?text=${waMsg}`:"", key:"whatsapp" },
+  { ico:"⭐", label:"給我們 Google 評價", sub:"Leave us a review", href:SHOP.review, key:"review" },
+  { ico:"📞", label:"致電", sub:"Call us", href:real(SHOP.phone)?`tel:+${SHOP.phone}`:"", key:"phone" },
+  { ico:"📘", label:"Facebook", sub:"", href:real(SHOP.facebook)?SHOP.facebook:"", key:"facebook" },
+  { ico:"📸", label:"Instagram", sub:"", href:real(SHOP.instagram)?SHOP.instagram:"", key:"instagram" },
+];
+
+const hoursReady = SHOP.hours.some(([,t]) => real(t));
+
+let html = `
+  <div class="logo">${SHOP.nameZh}</div>
+  <h1>${SHOP.nameZh}<small>${SHOP.nameEn}</small></h1>
+  <p class="tagline">${SHOP.tagline}</p>
+  <div class="chips">
+    <span class="chip halal">✓ HALAL</span>
+    <span class="chip loc">📍 ${SHOP.area}</span>
+  </div>
+`;
+
+for (const b of buttons) {
+  const sub = b.sub ? `<span class="sub">${b.sub}</span>` : "";
+  if (b.href) {
+    const tgt = b.href.startsWith("http") ? ` target="_blank" rel="noopener"` : "";
+    html += `<a class="btn ${b.primary?'primary':''}" href="${b.href}"${tgt}>
+      <span class="ico">${b.ico}</span><span>${b.label}${sub}</span></a>`;
+  } else {
+    html += `<div class="btn todo"><span class="ico">${b.ico}</span>
+      <span>${b.label}<span class="sub">待提供資料</span></span></div>`;
+  }
+}
+
+if (hoursReady) {
+  html += `<div class="hours"><h2>🕒 營業時間 Opening Hours</h2>`;
+  for (const [d,t] of SHOP.hours) if (real(t)) html += `<div class="row"><span>${d}</span><span>${t}</span></div>`;
+  html += `</div>`;
+}
+
+html += `<footer>© ${new Date().getFullYear()} ${SHOP.nameEn} 有口福 · Rawang</footer>`;
+document.getElementById("app").innerHTML = html;
+</script>
+</body>
+</html>

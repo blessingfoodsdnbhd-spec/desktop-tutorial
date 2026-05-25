@@ -67,29 +67,31 @@ def _get(url, headers=None, data=None, timeout=90):
 
 
 def geocode_area(name):
-    """Resolve an area name to an Overpass search target.
+    """Resolve an area name to a bounding box (south, west, north, east).
 
-    Returns ("area", area_id) when the place is a mappable boundary, otherwise
-    ("bbox", (south, west, north, east)) as a fallback.
+    Uses the bounding box of Nominatim's best match. The box scales naturally with
+    the place: a suburb gives a small box, a city a large one. A point-like match
+    (e.g. a single node) is padded to ~2 km so the search area is never empty.
     """
-    query = urllib.parse.urlencode({"q": name, "format": "json", "limit": 10})
+    query = urllib.parse.urlencode({"q": name, "format": "json", "limit": 5})
     raw = _get(f"{NOMINATIM_URL}?{query}")
     results = json.loads(raw)
     if not results:
         raise SystemExit(f"Could not find any place called {name!r}. Try a broader name.")
 
-    # Prefer a relation (administrative boundary) -> becomes a clean Overpass area.
-    for r in results:
-        if r.get("osm_type") == "relation":
-            return ("area", 3600000000 + int(r["osm_id"]))
-    for r in results:
-        if r.get("osm_type") == "way":
-            return ("area", 2400000000 + int(r["osm_id"]))
+    top = results[0]
+    # Nominatim boundingbox order is [south, north, west, east] (as strings).
+    south, north, west, east = (float(x) for x in top["boundingbox"])
 
-    # Fall back to the bounding box of the best match (e.g. a place node).
-    bb = results[0]["boundingbox"]  # [south, north, west, east] as strings
-    south, north, west, east = (float(x) for x in bb)
-    return ("bbox", (south, west, north, east))
+    min_span = 0.02  # ~2.2 km, guards against a point-like result
+    if (north - south) < min_span or (east - west) < min_span:
+        lat, lon = (north + south) / 2, (east + west) / 2
+        south, north = lat - min_span / 2, lat + min_span / 2
+        west, east = lon - min_span / 2, lon + min_span / 2
+
+    print(f"  matched: {top.get('display_name', name)}", file=sys.stderr)
+    print(f"  search box: S{south:.4f} W{west:.4f} N{north:.4f} E{east:.4f}", file=sys.stderr)
+    return (south, west, north, east)
 
 
 def _selector_to_overpass(key, value):
@@ -98,15 +100,9 @@ def _selector_to_overpass(key, value):
     return f'["{key}"="{value}"]'
 
 
-def build_overpass_query(target, types, timeout=90):
-    kind, ref = target
-    if kind == "area":
-        scope_setup = f"area({ref})->.searchArea;"
-        scope = "(area.searchArea)"
-    else:
-        south, west, north, east = ref
-        scope_setup = ""
-        scope = f"({south},{west},{north},{east})"
+def build_overpass_query(bbox, types, timeout=90):
+    south, west, north, east = bbox
+    scope = f"({south},{west},{north},{east})"
 
     lines = []
     for t in types:
@@ -115,7 +111,7 @@ def build_overpass_query(target, types, timeout=90):
             lines.append(f"  nwr{sel}{scope};")
 
     body = "\n".join(lines)
-    return f"[out:json][timeout:{timeout}];\n{scope_setup}\n(\n{body}\n);\nout tags center;"
+    return f"[out:json][timeout:{timeout}];\n(\n{body}\n);\nout tags center;"
 
 
 def run_overpass(query):
@@ -252,11 +248,11 @@ def main(argv=None):
             raise SystemExit(f"--require only supports: phone, website, email (got {f!r})")
 
     print(f"Resolving area: {args.area} ...", file=sys.stderr)
-    target = geocode_area(args.area)
+    bbox = geocode_area(args.area)
     time.sleep(1)  # be polite to Nominatim
 
     print(f"Searching for: {', '.join(types)} ...", file=sys.stderr)
-    query = build_overpass_query(target, types)
+    query = build_overpass_query(bbox, types)
     elements = run_overpass(query)
 
     rows = [r for r in (extract(el, types) for el in elements) if r]

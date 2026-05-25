@@ -67,7 +67,9 @@ python3 find_leads.py --area "Bangsar, Kuala Lumpur" --types restaurant,cafe,hot
 | `fast_food` | 速食店 |
 | `hotel` | 飯店 / 民宿 / 青旅 |
 | `office` | 辦公室 |
-| `retail` | 零售店 |
+| `retail` | 零售店(所有商店,範圍最廣) |
+| `grocery` | 雜貨店 / 便利店 / 超市 / 熟食店 |
+| `giftshop` | 禮品店 / 糖果餅乾店 |
 | `salon` | 美髮 / 美容 / SPA |
 | `gym` | 健身房 |
 | `clinic` | 診所 / 牙醫 |
@@ -144,5 +146,5 @@ python3 find_leads.py --area "Bangsar South" --types office --require website
 
 ## 之後可以加的功能(需要時再跟我說)
 
-1. **用 Claude 自動判斷 + 寫開場白**:每一筆幫你判斷「像不像會需要室內設計」,並草擬一句個人化的開發訊息(需 Anthropic API key)。
+1. **用 Claude 自動判斷 + 寫開場白**:每一筆幫你判斷適不適合當客戶,並草擬一句個人化的開發訊息(需 Anthropic API key)。
 2. **升級 Google Places**:補上星級評分、評論數、更完整的電話與網站(需 Google API key)。
